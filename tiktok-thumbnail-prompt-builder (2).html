@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TikTok Thumbnail Prompt Builder</title>
+<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0f0f0f;--surface:#1a1a1a;--surface2:#222;--border:#2e2e2e;
+  --text:#f0f0f0;--text2:#888;--text3:#555;
+  --accent:#FFD600;--red:#CC0000;
+  --radius:10px;--radius-sm:6px;
+}
+body{background:var(--bg);color:var(--text);font-family:'Sarabun',sans-serif;min-height:100vh;padding:24px 20px}
+.app{max-width:1100px;margin:0 auto}
+.app-header{margin-bottom:24px;border-bottom:1px solid var(--border);padding-bottom:16px}
+.app-header .label{font-size:11px;letter-spacing:3px;color:var(--accent);text-transform:uppercase;margin-bottom:6px}
+.app-header h1{font-family:'Space Grotesk',sans-serif;font-size:22px;font-weight:700;color:#fff}
+.app-header p{font-size:13px;color:var(--text2);margin-top:4px}
+.grid{display:grid;grid-template-columns:1fr 280px;gap:20px;align-items:start}
+.panel{background:var(--surface);border-radius:var(--radius);border:1px solid var(--border);overflow:hidden}
+.panel-sec{padding:16px;border-bottom:1px solid var(--border)}
+.panel-sec:last-child{border-bottom:none}
+.sec-label{font-size:10px;letter-spacing:2px;color:var(--text3);text-transform:uppercase;margin-bottom:10px;font-weight:500}
+.row{display:flex;gap:8px;margin-bottom:8px;flex-wrap:wrap}
+.f{flex:1;min-width:90px}
+label{font-size:12px;color:var(--text2);display:block;margin-bottom:4px}
+input[type=text],textarea,select{
+  font-family:'Sarabun',sans-serif;font-size:13px;color:var(--text);
+  background:var(--surface2);border:1px solid var(--border);
+  border-radius:var(--radius-sm);padding:7px 10px;width:100%;
+  outline:none;transition:border-color .15s;
+}
+input[type=text]:focus,textarea:focus,select:focus{border-color:#444}
+textarea{resize:vertical;min-height:46px;line-height:1.5}
+select option{background:#1a1a1a}
+
+/* Toggle */
+.sw-row{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.sw{width:36px;height:20px;border-radius:10px;background:var(--border);border:none;cursor:pointer;position:relative;flex-shrink:0;transition:background .2s}
+.sw.on{background:#444}
+.sw::after{content:'';position:absolute;width:14px;height:14px;border-radius:50%;background:#fff;top:3px;left:3px;transition:left .2s}
+.sw.on::after{left:19px}
+.sw-lbl{font-size:13px;color:var(--text2)}
+
+/* Upload */
+.ubox{border:1px dashed var(--border);border-radius:var(--radius-sm);padding:12px;text-align:center;color:var(--text3);font-size:12px;cursor:pointer;position:relative;margin-bottom:6px;transition:border-color .15s}
+.ubox:hover{border-color:#444}
+.ubox input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
+.uprev{width:100%;max-height:80px;object-fit:cover;border-radius:var(--radius-sm);display:none;margin-bottom:6px}
+
+/* Swatches */
+.sw-group{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px}
+.swatch{width:24px;height:24px;border-radius:50%;cursor:pointer;border:2px solid transparent;transition:all .15s;flex-shrink:0}
+.swatch.on{border-color:#fff;transform:scale(1.2)}
+.color-row{display:flex;align-items:center;gap:10px;margin-bottom:6px}
+.color-row .clbl{font-size:12px;color:var(--text2);min-width:36px;flex-shrink:0}
+
+/* Slider */
+.sl-row{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.sl-row .slbl{font-size:12px;color:var(--text2);min-width:36px;flex-shrink:0}
+.sl-row input[type=range]{flex:1;-webkit-appearance:none;height:3px;background:var(--border);border-radius:2px;outline:none}
+.sl-row input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:16px;height:16px;border-radius:50%;background:#fff;cursor:pointer}
+.sl-val{font-size:12px;font-weight:600;color:#fff;min-width:52px;text-align:right}
+
+/* Shadow toggle section */
+.shadow-sec{margin-top:8px;padding:10px;background:var(--surface2);border-radius:var(--radius-sm);border:1px solid var(--border)}
+.shadow-sec .sec-label{margin-bottom:8px}
+
+/* Layout picker */
+.lgrid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:5px;margin-bottom:8px}
+.lbtn{padding:7px 4px;border-radius:var(--radius-sm);border:1px solid var(--border);background:var(--surface2);color:var(--text2);font-size:10.5px;cursor:pointer;text-align:center;line-height:1.45;font-family:'Sarabun',sans-serif;transition:all .15s}
+.lbtn:hover{border-color:#444;color:var(--text)}
+.lbtn.on{background:#1e1c00;border-color:var(--accent);color:var(--accent);font-weight:600}
+
+/* Chips */
+.chips{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:8px}
+.chip{padding:4px 10px;border-radius:20px;border:1px solid var(--border);background:transparent;color:var(--text2);font-size:12px;cursor:pointer;transition:all .15s;font-family:'Sarabun',sans-serif}
+.chip:hover{border-color:#444;color:var(--text)}
+.chip.on{background:#1e1c00;border-color:var(--accent);color:var(--accent);font-weight:600}
+
+/* Right col */
+.sticky-col{position:sticky;top:20px;display:flex;flex-direction:column;gap:14px}
+
+/* Mock thumbnail */
+.mock-wrap{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:14px}
+.mock-lbl{font-size:10px;color:var(--text3);margin-bottom:10px;letter-spacing:1px;text-transform:uppercase}
+.mock{width:100%;aspect-ratio:9/16;border-radius:8px;background:#0a0a0a;position:relative;overflow:hidden}
+.mock-bg-txt{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:10px;color:rgba(255,255,255,.1);text-align:center;line-height:1.6}
+.mock-content{position:absolute;inset:0;z-index:2;padding:8px 7px;display:flex;flex-direction:column}
+
+/* Mock text — NO background strips */
+.mt{
+  font-weight:900;line-height:1.05;text-align:center;
+  font-family:Impact,'Arial Black',sans-serif;
+  word-break:break-word;transition:all .2s;
+  text-shadow:2px 2px 6px rgba(0,0,0,.9),0 0 12px rgba(0,0,0,.7);
+  /* NO background, NO padding strip */
+}
+.mb{
+  font-size:8px;font-weight:700;
+  font-family:Impact,sans-serif;letter-spacing:.5px;
+  text-align:center;display:block;margin:2px auto;
+  background:#FFD600;color:#000;
+  padding:1px 6px;
+  /* badge pill รูปแบบเดิม — แต่เป็นแค่ badge เล็กๆ */
+}
+.mh{
+  line-height:1.25;text-align:center;
+  font-weight:700;word-break:break-word;transition:all .2s;
+  font-family:'Sarabun',sans-serif;
+  text-shadow:2px 2px 8px rgba(0,0,0,.95),0 0 16px rgba(0,0,0,.8);
+  /* NO background strip */
+}
+.mp{flex:1;display:flex;align-items:center;justify-content:center;font-size:28px;min-height:0}
+
+/* Output */
+.out-wrap{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden}
+.out-hdr{display:flex;justify-content:space-between;align-items:center;padding:12px 14px;border-bottom:1px solid var(--border)}
+.out-lbl{font-size:10px;letter-spacing:2px;color:var(--text3);text-transform:uppercase;font-weight:500}
+.copy-btn{font-size:11px;color:var(--accent);cursor:pointer;padding:3px 10px;border-radius:20px;border:1px solid #3a3000;background:transparent;font-family:'Sarabun',sans-serif;transition:all .15s}
+.copy-btn:hover{background:#1e1c00}
+.out-box{padding:12px 14px;font-size:11.5px;line-height:1.75;color:#ccc;white-space:pre-wrap;max-height:220px;overflow-y:auto;font-family:'Courier New',monospace}
+.neg-hdr{display:flex;justify-content:space-between;align-items:center;padding:8px 14px;border-top:1px solid var(--border)}
+.neg-box{padding:8px 14px 12px;font-size:11px;color:var(--text3);line-height:1.6;max-height:70px;overflow-y:auto}
+
+.note{font-size:11px;color:var(--text3);line-height:1.5;margin-top:4px}
+.divider{border:none;border-top:1px solid var(--border);margin:.8rem 0}
+
+/* Info badge */
+.info-tag{display:inline-block;padding:2px 8px;border-radius:4px;background:#1e3a1e;border:1px solid #2a5a2a;color:#4ade80;font-size:10px;margin-bottom:8px}
+
+@media(max-width:700px){
+  .grid{grid-template-columns:1fr}
+  .sticky-col{position:static}
+}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="app-header">
+    <div class="label">Prompt Builder</div>
+    <h1>TikTok Thumbnail Prompt Generator</h1>
+    <p>กรอกข้อมูล → Copy Prompt → ใช้กับ GPT-4o / Gemini ImageFX ได้เลย</p>
+  </div>
+
+  <div class="grid">
+    <!-- LEFT FORM -->
+    <div class="panel">
+
+      <!-- บริบท -->
+      <div class="panel-sec">
+        <div class="sec-label">บริบทคอนเทนต์</div>
+        <div class="row">
+          <div class="f"><label>รูปแบบ</label>
+            <select id="stype" onchange="build()">
+              <option value="solo">Solo Creator / Coach (1 คน)</option>
+              <option value="podcast">Podcast / Talk Show (2 คน)</option>
+              <option value="sales">Sales Training</option>
+              <option value="case">Case Study / Untold Story</option>
+              <option value="promo">โปรโมท Course / Workshop</option>
+              <option value="news">News / Trend / Insight</option>
+            </select>
+          </div>
+          <div class="f"><label>จำนวนคน</label>
+            <select id="scnt" onchange="build()">
+              <option value="1">1 คน</option>
+              <option value="2">2 คน</option>
+              <option value="0">ไม่มีคน</option>
+            </select>
+          </div>
+        </div>
+        <div class="row">
+          <div class="f"><label>เพศ</label>
+            <select id="sgdr" onchange="build()">
+              <option value="f">หญิง</option>
+              <option value="m">ชาย</option>
+              <option value="f-m">หญิง + ชาย</option>
+              <option value="m-f">ชาย + หญิง</option>
+              <option value="m-m">ชาย + ชาย</option>
+              <option value="f-f">หญิง + หญิง</option>
+            </select>
+          </div>
+          <div class="f"><label>อารมณ์</label>
+            <select id="sexpr" onchange="build()">
+              <option value="confident">มั่นใจ / Authority</option>
+              <option value="power">Empowered / พลัง</option>
+              <option value="contrast">จริงจัง + ยิ้ม</option>
+              <option value="serious">จริงจัง</option>
+              <option value="smile">ยิ้ม / Friendly</option>
+            </select>
+          </div>
+          <div class="f"><label>แต่งตัว</label>
+            <select id="sout" onchange="build()">
+              <option value="blazer">Business Blazer</option>
+              <option value="smart">Smart Casual</option>
+              <option value="formal">Formal Suit</option>
+              <option value="casual">Casual</option>
+            </select>
+          </div>
+        </div>
+        <div class="sw-row">
+          <button class="sw" id="swup" onclick="togUp()"></button>
+          <span class="sw-lbl" id="swup-l">ให้ AI สร้างคน</span>
+        </div>
+        <div id="up-p" style="display:none">
+          <div class="ubox">
+            <img id="pp" class="uprev">
+            <div>📤 Upload รูปคนที่ต้องการ</div>
+            <input type="file" accept="image/*" onchange="pv(event,'pp')">
+          </div>
+          <div class="note">Upload รูปนี้พร้อม Prompt ไปใน GPT-4o — ระบบจะ composite หน้าคนเข้าภาพ</div>
+        </div>
+      </div>
+
+      <!-- TITLE -->
+      <div class="panel-sec">
+        <div class="sec-label">Title ใหญ่ (ภาษาอังกฤษ)</div>
+        <div class="info-tag">✦ ข้อความลอยบนพื้นหลัง — ไม่มีแถบสีดำ</div>
+        <input type="text" id="ititle" placeholder="เช่น AI FOR WORK / GLOCAL / SALES MASTER" oninput="build()" style="margin-bottom:10px">
+        <div class="color-row">
+          <span class="clbl">สี</span>
+          <div class="sw-group" id="tc">
+            <div class="swatch on" style="background:#CC0000" data-c="#CC0000" onclick="pc('tc',this,'t')" title="แดง BSG"></div>
+            <div class="swatch" style="background:#FFD600" data-c="#FFD600" onclick="pc('tc',this,'t')" title="เหลือง"></div>
+            <div class="swatch" style="background:#ffffff;outline:1px solid #444" data-c="#ffffff" onclick="pc('tc',this,'t')" title="ขาว"></div>
+            <div class="swatch" style="background:#FF6B00" data-c="#FF6B00" onclick="pc('tc',this,'t')" title="ส้ม"></div>
+            <div class="swatch" style="background:#1565C0" data-c="#1565C0" onclick="pc('tc',this,'t')" title="น้ำเงิน"></div>
+            <div class="swatch" style="background:#22C55E" data-c="#22C55E" onclick="pc('tc',this,'t')" title="เขียว"></div>
+            <div class="swatch" style="background:#A855F7" data-c="#A855F7" onclick="pc('tc',this,'t')" title="ม่วง"></div>
+          </div>
+        </div>
+        <div class="sl-row">
+          <span class="slbl">ขนาด</span>
+          <input type="range" min="1" max="5" step="1" value="3" id="tsz" oninput="build()">
+          <span class="sl-val" id="tsz-v">กลาง</span>
+        </div>
+        <div class="shadow-sec">
+          <div class="sec-label">Text Shadow (เพื่อให้อ่านออกบนพื้นหลัง)</div>
+          <div class="chips" id="tsh">
+            <div class="chip on" onclick="csh('tsh',this,'t','strong')">Shadow แรง</div>
+            <div class="chip" onclick="csh('tsh',this,'t','medium')">Shadow กลาง</div>
+            <div class="chip" onclick="csh('tsh',this,'t','glow')">Glow เรืองแสง</div>
+            <div class="chip" onclick="csh('tsh',this,'t','outline')">Outline ขอบ</div>
+            <div class="chip" onclick="csh('tsh',this,'t','none')">ไม่มี Shadow</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- HEADLINE -->
+      <div class="panel-sec">
+        <div class="sec-label">Headline ภาษาไทย</div>
+        <div class="info-tag">✦ ข้อความลอยบนพื้นหลัง — ไม่มีแถบสีดำ</div>
+        <textarea id="ithai" placeholder='เช่น AI เพื่อคนทำงาน "จริง"&#10;หรือ วันนี้องค์กรของคุณ มี AI ช่วยงานแล้วหรือยัง' oninput="build()" style="margin-bottom:10px"></textarea>
+        <div class="color-row">
+          <span class="clbl">สี</span>
+          <div class="sw-group" id="hc">
+            <div class="swatch" style="background:#CC0000" data-c="#CC0000" onclick="pc('hc',this,'h')" title="แดง BSG"></div>
+            <div class="swatch" style="background:#FFD600" data-c="#FFD600" onclick="pc('hc',this,'h')" title="เหลือง"></div>
+            <div class="swatch on" style="background:#ffffff;outline:1px solid #444" data-c="#ffffff" onclick="pc('hc',this,'h')" title="ขาว"></div>
+            <div class="swatch" style="background:#FF6B00" data-c="#FF6B00" onclick="pc('hc',this,'h')" title="ส้ม"></div>
+            <div class="swatch" style="background:#1565C0" data-c="#1565C0" onclick="pc('hc',this,'h')" title="น้ำเงิน"></div>
+            <div class="swatch" style="background:#22C55E" data-c="#22C55E" onclick="pc('hc',this,'h')" title="เขียว"></div>
+          </div>
+        </div>
+        <div class="sl-row">
+          <span class="slbl">ขนาด</span>
+          <input type="range" min="1" max="5" step="1" value="3" id="hsz" oninput="build()">
+          <span class="sl-val" id="hsz-v">กลาง</span>
+        </div>
+        <div class="color-row" style="margin-top:4px">
+          <span class="clbl" style="font-size:11px">Quote<br>สี</span>
+          <div class="sw-group" id="qc">
+            <div class="swatch on" style="background:#CC0000" data-c="#CC0000" onclick="pc('qc',this,'q')" title="แดง"></div>
+            <div class="swatch" style="background:#FFD600" data-c="#FFD600" onclick="pc('qc',this,'q')" title="เหลือง"></div>
+            <div class="swatch" style="background:#FF6B00" data-c="#FF6B00" onclick="pc('qc',this,'q')" title="ส้ม"></div>
+            <div class="swatch" style="background:#ffffff;outline:1px solid #444" data-c="#ffffff" onclick="pc('qc',this,'q')" title="ขาว"></div>
+            <div class="swatch" style="background:#22C55E" data-c="#22C55E" onclick="pc('qc',this,'q')" title="เขียว"></div>
+          </div>
+        </div>
+        <div class="shadow-sec">
+          <div class="sec-label">Text Shadow (เพื่อให้อ่านออกบนพื้นหลัง)</div>
+          <div class="chips" id="hsh">
+            <div class="chip on" onclick="csh('hsh',this,'h','strong')">Shadow แรง</div>
+            <div class="chip" onclick="csh('hsh',this,'h','medium')">Shadow กลาง</div>
+            <div class="chip" onclick="csh('hsh',this,'h','glow')">Glow เรืองแสง</div>
+            <div class="chip" onclick="csh('hsh',this,'h','outline')">Outline ขอบ</div>
+            <div class="chip" onclick="csh('hsh',this,'h','none')">ไม่มี Shadow</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- BADGE + LAYOUT -->
+      <div class="panel-sec">
+        <div class="sec-label">Sub-label / Badge</div>
+        <div class="note" style="margin-bottom:6px">Badge ยังคงมีพื้น #FFD600 เพื่อความโดดเด่น (pill shape เล็กๆ)</div>
+        <input type="text" id="ibadge" placeholder="เช่น AI FOR WORK / EP.01 / BSG METHOD" oninput="build()">
+      </div>
+
+      <div class="panel-sec">
+        <div class="sec-label">ตำแหน่งข้อความ — คนอยู่กลางเสมอ</div>
+        <div class="lgrid" id="pgrid">
+          <button class="lbtn" onclick="pp2(this,'top-mid-bot')">Title บน<br>คนกลาง<br>Headline ล่าง</button>
+          <button class="lbtn on" onclick="pp2(this,'top-bot')">Title+Badge บน<br>คนกลาง<br>Headline ล่าง</button>
+          <button class="lbtn" onclick="pp2(this,'all-top')">ทุกอย่างบน<br>คนล่าง</button>
+          <button class="lbtn" onclick="pp2(this,'all-bot')">คนบน<br>ทุกอย่างล่าง</button>
+          <button class="lbtn" onclick="pp2(this,'split-lr')">คนขวา<br>ตัวหนังสือซ้าย</button>
+          <button class="lbtn" onclick="pp2(this,'overlay')">ข้อความซ้อน<br>บนคน</button>
+        </div>
+      </div>
+
+      <!-- BG -->
+      <div class="panel-sec">
+        <div class="sec-label">พื้นหลัง</div>
+        <div class="sw-row">
+          <button class="sw" id="swbg" onclick="togBg()"></button>
+          <span class="sw-lbl" id="swbg-l">ให้ AI สร้างพื้นหลัง</span>
+        </div>
+        <div id="bg-chips-sec">
+          <div class="chips" id="bgc">
+            <div class="chip on" onclick="cbg(this,'urban')">เมือง / ถนน</div>
+            <div class="chip" onclick="cbg(this,'office')">ออฟฟิศ</div>
+            <div class="chip" onclick="cbg(this,'store')">ร้านค้า / ตลาด</div>
+            <div class="chip" onclick="cbg(this,'studio')">Studio มืด</div>
+            <div class="chip" onclick="cbg(this,'conf')">ห้องประชุม</div>
+            <div class="chip" onclick="cbg(this,'nature')">ธรรมชาติ</div>
+            <div class="chip" onclick="cbg(this,'abstract')">Abstract</div>
+            <div class="chip" onclick="cbg(this,'factory')">โรงงาน</div>
+          </div>
+        </div>
+        <div id="bg-up-sec" style="display:none">
+          <div class="ubox">
+            <img id="pb2" class="uprev">
+            <div>🖼️ Upload รูปพื้นหลัง</div>
+            <input type="file" accept="image/*" onchange="pv(event,'pb2')">
+          </div>
+          <div class="note">GPT-4o จะ composite คนและ typography ลงบนรูปนี้</div>
+        </div>
+      </div>
+
+      <!-- MOOD -->
+      <div class="panel-sec">
+        <div class="sec-label">โทนภาพ & แสง</div>
+        <div class="row">
+          <div class="f"><label>โทนสี</label>
+            <select id="stone" onchange="build()">
+              <option value="dark-red">Dark + Red Glow (BSG)</option>
+              <option value="dark-cinematic">Dark Cinematic</option>
+              <option value="dark-gold">Dark + Gold Tone</option>
+              <option value="dark-cool">Dark + Cool Blue</option>
+              <option value="dark-warm">Dark + Warm Amber</option>
+              <option value="high-contrast">High Contrast B&W</option>
+              <option value="moody-grey">Moody Grey</option>
+              <option value="clean-dark">Clean Dark</option>
+            </select>
+          </div>
+          <div class="f"><label>แสง</label>
+            <select id="slight" onchange="build()">
+              <option value="dramatic">Dramatic Spotlight</option>
+              <option value="rim">Rim Light</option>
+              <option value="side">Cinematic Side</option>
+              <option value="ambient">Ambient Dark</option>
+              <option value="backlit">Backlit</option>
+              <option value="edge">Edge Glow</option>
+            </select>
+          </div>
+        </div>
+        <div class="row">
+          <div class="f"><label>Grain / Texture</label>
+            <select id="sgrain" onchange="build()">
+              <option value="film">Film Grain</option>
+              <option value="clean">Clean (ไม่มี Grain)</option>
+              <option value="gritty">Gritty Heavy</option>
+              <option value="noise">Subtle Noise</option>
+            </select>
+          </div>
+          <div class="f"><label>Vignette</label>
+            <select id="svig" onchange="build()">
+              <option value="strong">Strong</option>
+              <option value="subtle">Subtle</option>
+              <option value="none">None</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /panel -->
+
+    <!-- RIGHT COL -->
+    <div class="sticky-col">
+
+      <div class="mock-wrap">
+        <div class="mock-lbl">Preview Layout</div>
+        <div class="mock" id="mock">
+          <div class="mock-bg-txt">Background Zone</div>
+          <div class="mock-content" id="mc"></div>
+        </div>
+      </div>
+
+      <div class="out-wrap">
+        <div class="out-hdr">
+          <span class="out-lbl">Prompt</span>
+          <button class="copy-btn" onclick="co('ob','Copy Prompt')">Copy Prompt</button>
+        </div>
+        <div class="out-box" id="ob">กรอกข้อมูลด้านซ้าย Prompt จะปรากฏที่นี่อัตโนมัติ</div>
+        <div class="neg-hdr">
+          <span class="out-lbl">Negative Prompt</span>
+          <button class="copy-btn" onclick="co('nb','Copy')">Copy</button>
+        </div>
+        <div class="neg-box" id="nb"></div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script>
+var TC='#CC0000',HC='#ffffff',QC='#CC0000',BG='urban',POS='top-bot',UPM=false,BGM=false;
+var TSH='strong', HSH='strong'; // text shadow defaults
+var SZL=['เล็กมาก','เล็ก','กลาง','ใหญ่','ใหญ่มาก'];
+var SZP=[
+  'VERY SMALL — title occupies ~13% of image height. Text is compact, minimal. Lots of breathing room for subject.',
+  'SMALL — title occupies ~18% of image height. Readable but not dominant. Subject has clear visual space.',
+  'MEDIUM — title occupies ~25% of image height. Balanced with subject. Standard thumbnail proportion.',
+  'LARGE — title occupies ~35% of image height. Bold and prominent. Subject still clearly visible.',
+  'VERY LARGE — title occupies ~48% of image height. Typography is the hero element. Subject is secondary.'
+];
+
+// Shadow descriptions for prompt
+var SHD={
+  strong:'strong black drop shadow (offset: 3px 3px, blur: 8px) plus additional dark outer glow (blur: 20px) for maximum legibility on any background. No background bar or strip behind text.',
+  medium:'medium drop shadow (offset: 2px 2px, blur: 6px, color: rgba(0,0,0,0.85)) for clean readability. No background bar or strip behind text.',
+  glow:'colored glow effect matching the text color, spread 0 0 20px, plus subtle dark drop shadow for depth. No background bar or strip behind text.',
+  outline:'text stroke outline in black (1-2px), high contrast edge. No background bar or strip behind text.',
+  none:'no shadow or outline. Text color must be strong enough to read against the background naturally. No background bar or strip behind text.'
+};
+
+var TPX=[8,10,13,17,22],HPX=[7,9,11,14,18];
+
+function pc(gid,el,t){
+  document.querySelectorAll('#'+gid+' .swatch').forEach(s=>s.classList.remove('on'));
+  el.classList.add('on');
+  var c=el.dataset.c;
+  if(t==='t')TC=c; else if(t==='h')HC=c; else QC=c;
+  build();
+}
+function pp2(el,v){
+  document.querySelectorAll('#pgrid .lbtn').forEach(b=>b.classList.remove('on'));
+  el.classList.add('on');POS=v;build();
+}
+function cbg(el,v){
+  document.querySelectorAll('#bgc .chip').forEach(c=>c.classList.remove('on'));
+  el.classList.add('on');BG=v;build();
+}
+function csh(gid,el,t,v){
+  document.querySelectorAll('#'+gid+' .chip').forEach(c=>c.classList.remove('on'));
+  el.classList.add('on');
+  if(t==='t')TSH=v; else HSH=v;
+  build();
+}
+function togUp(){
+  UPM=!UPM;
+  document.getElementById('swup').classList.toggle('on',UPM);
+  document.getElementById('swup-l').textContent=UPM?'ฉัน Upload รูปคน':'ให้ AI สร้างคน';
+  document.getElementById('up-p').style.display=UPM?'block':'none';
+  build();
+}
+function togBg(){
+  BGM=!BGM;
+  document.getElementById('swbg').classList.toggle('on',BGM);
+  document.getElementById('swbg-l').textContent=BGM?'ฉัน Upload รูปพื้นหลัง':'ให้ AI สร้างพื้นหลัง';
+  document.getElementById('bg-chips-sec').style.display=BGM?'none':'block';
+  document.getElementById('bg-up-sec').style.display=BGM?'block':'none';
+  build();
+}
+function pv(e,id){
+  var f=e.target.files[0];if(!f)return;
+  var r=new FileReader();
+  r.onload=function(ev){var i=document.getElementById(id);i.src=ev.target.result;i.style.display='block';};
+  r.readAsDataURL(f);
+}
+
+var BGD={urban:'blurred urban street with city lights and buildings',office:'blurred modern office interior with glass walls',store:'blurred retail store or marketplace environment',studio:'dark minimal studio with controlled lighting',conf:'blurred modern conference room or boardroom',nature:'blurred natural outdoor environment, greenery or sky',abstract:'abstract dark textured background with subtle patterns',factory:'blurred industrial warehouse or factory floor'};
+var TD={'dark-red':'dark background with dramatic red glow and red light leaks, high-energy BSG brand feel','dark-cinematic':'dark cinematic color grading, deep blacks, crushed shadows, filmic quality','dark-gold':'dark background with warm golden tones, luxury cinematic feel','dark-cool':'dark background with cool blue tones, tech and authority feel','dark-warm':'dark background with subtle amber warmth, storytelling mood','high-contrast':'extreme high contrast, near-black and near-white base with single accent color pop','moody-grey':'moody desaturated grey tones, editorial magazine style','clean-dark':'clean polished dark background, sleek and professional'};
+var LD={dramatic:'dramatic spotlight from above hitting the subject, strong top-down key light',rim:'rim lighting outlining subject edges with bright light, deep shadow on fill side',side:'cinematic side lighting, strong key light from one side, deep shadow on other',ambient:'natural ambient dark lighting, soft and realistic',backlit:'backlit subject with bright background glow, edge highlight on silhouette',edge:'subtle edge glow effect from colored light source on subject silhouette'};
+var GD={film:'film grain texture overlay for cinematic authenticity',clean:'clean and smooth, no grain or texture',gritty:'heavy gritty texture, raw and powerful feel',noise:'subtle digital noise for depth'};
+var VD={strong:'strong vignette, dark corners focusing attention to center',subtle:'subtle vignette, gentle darkening at edges',none:'no vignette'};
+var GND={f:'single Asian female speaker',m:'single Asian male speaker','f-m':'left: Asian female speaker, right: Asian male speaker','m-f':'left: Asian male speaker, right: Asian female speaker','m-m':'two Asian male speakers','f-f':'two Asian female speakers'};
+var OD={blazer:'business casual blazer, smart professional look',smart:'smart casual collared shirt or stylish top',formal:'formal business suit',casual:'stylish casual street outfit'};
+var ED={confident:'confident, direct eye contact with camera, slight authority look',power:'high energy, empowered, dynamic body language, motivated and driven',contrast:'left person: serious, thoughtful, looking slightly to the side. Right person: smiling or laughing naturally. Strong contrast in expressions.',serious:'both looking serious, focused, authoritative',smile:'both smiling warmly and naturally, friendly and approachable'};
+var PPOS={
+  'top-mid-bot':'LAYOUT: Place the Title at the very top of the image. Subject person centered in the middle zone (30-60% height). Headline text in the lower third (65-100%). Three distinct text–person–text zones.',
+  'top-bot':'LAYOUT: Title and Badge stacked in the upper 30-35% of image. Subject person centered in the middle zone (35-65% height). Headline text in the bottom 25-30%. Clear zone separation.',
+  'all-top':'LAYOUT: All typography (Title, Badge, Headline) stacked compactly in the upper 40%. Subject person fills the lower 60%, half-body shot rising from the bottom edge.',
+  'all-bot':'LAYOUT: Subject person occupies the upper 40-45%, half-body shot. All typography stacked in the lower 55-60%.',
+  'split-lr':'LAYOUT: Subject person on the right 50% of the image, looking slightly left. Title and Headline on the left 50%, vertically centered. Left-right split composition.',
+  'overlay':'LAYOUT: Subject person centered, filling most of the height. Title overlaid at the top. Headline overlaid at the bottom. Person clearly visible between text blocks. Text floats directly over the image.'
+};
+var TYPEN={solo:'TikTok solo creator / expert coach thumbnail',podcast:'TikTok podcast two-speaker format thumbnail',sales:'sales training motivational thumbnail, high energy',case:'business case study documentary-style thumbnail',promo:'course or workshop promotion thumbnail',news:'business news / trend / insight editorial thumbnail'};
+
+function build(){
+  var tsv=parseInt(document.getElementById('tsz').value);
+  var hsv=parseInt(document.getElementById('hsz').value);
+  document.getElementById('tsz-v').textContent=SZL[tsv-1];
+  document.getElementById('hsz-v').textContent=SZL[hsv-1];
+  var title=document.getElementById('ititle').value.trim();
+  var thai=document.getElementById('ithai').value.trim();
+  var badge=document.getElementById('ibadge').value.trim();
+  var type=document.getElementById('stype').value;
+  var cnt=document.getElementById('scnt').value;
+  var gdr=document.getElementById('sgdr').value;
+  var expr=document.getElementById('sexpr').value;
+  var outfit=document.getElementById('sout').value;
+  var tone=document.getElementById('stone').value;
+  var light=document.getElementById('slight').value;
+  var grain=document.getElementById('sgrain').value;
+  var vig=document.getElementById('svig').value;
+
+  updateMock(title,thai,badge,tsv,hsv);
+
+  var L=[];
+  L.push('Create a vertical 9:16 TikTok thumbnail — '+TYPEN[type]+'.','');
+  L.push('[LAYOUT — FOLLOW EXACTLY]');
+  L.push(PPOS[POS],'');
+  L.push('[BACKGROUND]');
+  if(BGM){
+    L.push('Use the uploaded background image as the scene. Apply: '+TD[tone]+'. Lighting: '+LD[light]+'. Texture: '+GD[grain]+'. '+VD[vig]+'.');
+  } else {
+    L.push(BGD[BG]+', heavily blurred bokeh. '+TD[tone]+'. Lighting: '+LD[light]+'. '+GD[grain]+'. '+VD[vig]+'.');
+  }
+  L.push('');
+  L.push('[PEOPLE]');
+  if(cnt==='0'){
+    L.push('No people. Bold typographic layout only, strong visual hierarchy.');
+  } else if(UPM){
+    L.push('Use the person in the uploaded photo as the main subject. Preserve their face, hair, and outfit exactly as shown. Composite them naturally into the scene with matching lighting and color grading.');
+    if(cnt==='2')L.push('If a second speaker is needed, generate a complementary Asian speaker beside them with the same lighting style.');
+  } else {
+    L.push(GND[gdr]+', half-body shot in the foreground. '+ED[expr]+' Wearing '+OD[outfit]+'.');
+  }
+  L.push('');
+  L.push('[TYPOGRAPHY — FLOATING TEXT, NO BACKGROUND BARS OR STRIPS]');
+  L.push('CRITICAL: Do NOT place any dark panel, semi-transparent strip, bar, or box behind ANY text. ALL text must float directly on top of the background or subject. Use only shadows and outlines for legibility.');
+  L.push('');
+  if(title){
+    L.push('TITLE: "'+title.toUpperCase()+'"');
+    L.push('  Color: '+TC);
+    L.push('  Font: Bebas Neue or Impact condensed bold, all caps');
+    L.push('  Size: '+SZP[tsv-1]);
+    L.push('  Text treatment: '+SHD[TSH]);
+    L.push('  Background behind text: NONE — text floats directly on image.');
+  }
+  if(badge){
+    L.push('BADGE LABEL: "'+badge.toUpperCase()+'" — small pill-shaped badge: yellow (#FFD600) fill with bold black text. Keep it compact, label-sized only — not a full-width strip.');
+  }
+  if(thai){
+    L.push('THAI HEADLINE: "'+thai+'"');
+    L.push('  Color: '+HC);
+    L.push('  Font: bold Thai weight, clean and readable');
+    L.push('  Size: '+SZP[hsv-1]);
+    L.push('  Text treatment: '+SHD[HSH]);
+    L.push('  Background behind text: NONE — text floats directly on image.');
+    L.push('  Important: words inside quotation marks ("...") must be rendered in '+QC+' and slightly larger/bolder than surrounding text for strong emphasis. No background behind quoted words either.');
+  }
+  if(!title&&!thai){
+    L.push('Add bold typography with clear visual hierarchy. Maximum two accent colors. All text floats on image — no panels or strips.');
+  }
+  L.push('');
+  L.push('DO NOT include any logos, brand marks, watermarks, or channel icons — added separately in post.');
+  L.push('');
+  L.push('[FINAL QUALITY]');
+  L.push('Photorealistic, high resolution, professional viral thumbnail quality. Clean separation between text zones and subject. No visual clutter. No background bars behind text. 9:16 aspect ratio.');
+
+  document.getElementById('ob').textContent=L.join('\n');
+
+  var neg='dark strip, dark bar, semi-transparent panel behind text, black background behind text, dark overlay under title or headline, text box, text banner, typography covering subject\'s face, unreadable Thai text, blurry text, any logo or watermark, cartoon style, distorted faces, extra fingers, white background, rainbow neon, stock photo look, generic AI face, cluttered composition, overexposed highlights';
+  if(tsv<=2)neg+=', large dominant text, bold text taking more than 25% of image height';
+  document.getElementById('nb').textContent=neg;
+}
+
+function updateMock(title,thai,badge,tsv,hsv){
+  var mc=document.getElementById('mc');
+  var shadowStyle='text-shadow:2px 2px 8px rgba(0,0,0,1),0 0 16px rgba(0,0,0,.8)';
+  var te=title?'<div class="mt" style="color:'+TC+';font-size:'+TPX[tsv-1]+'px;'+shadowStyle+'">'+escH(title.toUpperCase())+'</div>':'';
+  var be=badge?'<div class="mb">'+escH(badge.toUpperCase())+'</div>':'';
+  var he=thai?'<div class="mh" style="color:'+HC+';font-size:'+HPX[hsv-1]+'px;'+shadowStyle+'">'+escH(thai)+'</div>':'';
+  var pe='<div class="mp">🧍</div>';
+  var h='';
+  if(POS==='top-mid-bot'||POS==='top-bot')h=te+be+pe+he;
+  else if(POS==='all-top')h=te+be+he+pe;
+  else if(POS==='all-bot')h=pe+te+be+he;
+  else if(POS==='split-lr')h='<div style="display:flex;height:100%;gap:3px"><div style="flex:1;display:flex;flex-direction:column;justify-content:center;padding:4px">'+te+be+he+'</div><div style="flex:1;display:flex;align-items:center;justify-content:center;font-size:24px">🧍</div></div>';
+  else if(POS==='overlay')h=te+be+pe+he;
+  mc.innerHTML=h;
+}
+
+function escH(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+
+function co(id,lbl){
+  var txt=document.getElementById(id).textContent;
+  navigator.clipboard.writeText(txt).then(function(){
+    var btns=document.querySelectorAll('.copy-btn');
+    btns.forEach(function(b){
+      if(b.getAttribute('onclick')&&b.getAttribute('onclick').includes(id)){
+        b.textContent='Copied ✓';
+        setTimeout(function(){b.textContent=lbl;},2000);
+      }
+    });
+  });
+}
+
+build();
+</script>
+</body>
+</html>
