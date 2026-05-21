@@ -3,477 +3,807 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>TikTok Thumbnail Prompt Builder</title>
+<title>PicPrompt Pro — โปรสร้างปก</title>
 <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-:root{
-  --bg:#0f0f0f;--surface:#1a1a1a;--surface2:#222;--border:#2e2e2e;
-  --text:#f0f0f0;--text2:#888;--text3:#555;
-  --accent:#FFD600;--red:#CC0000;
-  --radius:10px;--radius-sm:6px;
-}
-body{background:var(--bg);color:var(--text);font-family:'Sarabun',sans-serif;min-height:100vh;padding:24px 20px}
-.app{max-width:1100px;margin:0 auto}
-.app-header{margin-bottom:24px;border-bottom:1px solid var(--border);padding-bottom:16px}
-.app-header .label{font-size:11px;letter-spacing:3px;color:var(--accent);text-transform:uppercase;margin-bottom:6px}
-.app-header h1{font-family:'Space Grotesk',sans-serif;font-size:22px;font-weight:700;color:#fff}
-.app-header p{font-size:13px;color:var(--text2);margin-top:4px}
-.grid{display:grid;grid-template-columns:1fr 280px;gap:20px;align-items:start}
-.panel{background:var(--surface);border-radius:var(--radius);border:1px solid var(--border);overflow:hidden}
-.panel-sec{padding:16px;border-bottom:1px solid var(--border)}
-.panel-sec:last-child{border-bottom:none}
-.sec-label{font-size:10px;letter-spacing:2px;color:var(--text3);text-transform:uppercase;margin-bottom:10px;font-weight:500}
-.row{display:flex;gap:8px;margin-bottom:8px;flex-wrap:wrap}
-.f{flex:1;min-width:90px}
-label{font-size:12px;color:var(--text2);display:block;margin-bottom:4px}
-input[type=text],textarea,select{
-  font-family:'Sarabun',sans-serif;font-size:13px;color:var(--text);
-  background:var(--surface2);border:1px solid var(--border);
-  border-radius:var(--radius-sm);padding:7px 10px;width:100%;
-  outline:none;transition:border-color .15s;
-}
-input[type=text]:focus,textarea:focus,select:focus{border-color:#444}
-textarea{resize:vertical;min-height:46px;line-height:1.5}
+:root{--bg:#0f0f0f;--s1:#1a1a1a;--s2:#222;--s3:#2a2a2a;--bd:#2e2e2e;--bd2:#444;--t1:#f0f0f0;--t2:#999;--t3:#555;--acc:#FFD600;--red:#CC0000;--r:10px;--rs:6px}
+body{background:var(--bg);color:var(--t1);font-family:'Sarabun',sans-serif;min-height:100vh;padding:16px}
+.app{max-width:1200px;margin:0 auto}
+
+/* HEADER */
+.hdr{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;padding-bottom:12px;margin-bottom:14px;border-bottom:1px solid var(--bd)}
+.hdr-l .sub{font-size:10px;letter-spacing:3px;color:var(--acc);text-transform:uppercase}
+.hdr-l h1{font-family:'Space Grotesk',sans-serif;font-size:19px;font-weight:700}
+.hdr-l .th{font-size:11px;color:var(--t3)}
+.ver{font-size:10px;color:var(--t3);background:var(--s2);padding:3px 8px;border-radius:20px;border:1px solid var(--bd)}
+
+/* STEPS */
+.steps{display:flex;gap:0;margin-bottom:14px;background:var(--s1);border-radius:var(--r);border:1px solid var(--bd);overflow:hidden}
+.step{flex:1;padding:8px 4px;text-align:center;font-size:10px;color:var(--t3);border-right:1px solid var(--bd);transition:all .2s;cursor:default}
+.step:last-child{border-right:none}
+.step.on{background:#1e1c00;color:var(--acc);font-weight:600}
+.step .sn{display:block;font-size:14px;font-weight:700;line-height:1}
+.step .sl{display:block;margin-top:2px;font-size:9px}
+
+/* PLATFORM */
+.ptabs{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:14px}
+.ptab{padding:6px 12px;border-radius:20px;border:1px solid var(--bd);background:transparent;color:var(--t2);font-size:11px;cursor:pointer;font-family:'Sarabun',sans-serif;transition:all .15s}
+.ptab:hover{border-color:var(--bd2);color:var(--t1)}
+.ptab.on{background:#1e1c00;border-color:var(--acc);color:var(--acc);font-weight:600}
+.ptab .r{font-size:9px;opacity:.6;margin-left:2px}
+
+/* MAIN */
+.main{display:grid;grid-template-columns:1fr 290px;gap:12px;align-items:start}
+
+/* ACCORDION */
+.acc{background:var(--s1);border-radius:var(--r);border:1px solid var(--bd);margin-bottom:10px;overflow:hidden}
+.acc-hdr{display:flex;align-items:center;justify-content:space-between;padding:11px 14px;cursor:pointer;user-select:none;transition:background .15s}
+.acc-hdr:hover{background:var(--s2)}
+.acc-hdr .ah-l{display:flex;align-items:center;gap:8px}
+.acc-hdr .anum{width:20px;height:20px;border-radius:50%;background:var(--acc);color:#000;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.acc-hdr .atitle{font-size:12px;font-weight:600;color:var(--t1)}
+.acc-hdr .asub{font-size:10px;color:var(--t3);margin-left:4px}
+.acc-hdr .arr{font-size:12px;color:var(--t3);transition:transform .2s}
+.acc-hdr.open .arr{transform:rotate(180deg)}
+.acc-body{display:none;padding:12px 14px;border-top:1px solid var(--bd)}
+.acc-body.open{display:block}
+
+/* FORM ELEMENTS */
+label{font-size:11px;color:var(--t2);display:block;margin-bottom:3px}
+input[type=text],select,textarea{font-family:'Sarabun',sans-serif;font-size:13px;color:var(--t1);background:var(--s2);border:1px solid var(--bd);border-radius:var(--rs);padding:7px 9px;width:100%;outline:none;transition:border-color .15s}
+input[type=text]:focus,select:focus,textarea:focus{border-color:var(--bd2)}
 select option{background:#1a1a1a}
+textarea{resize:vertical;line-height:1.5}
+.row2{display:flex;gap:7px;margin-bottom:8px;flex-wrap:wrap}
+.f{flex:1;min-width:75px}
+.mb8{margin-bottom:8px}
 
-/* Toggle */
-.sw-row{display:flex;align-items:center;gap:10px;margin-bottom:8px}
-.sw{width:36px;height:20px;border-radius:10px;background:var(--border);border:none;cursor:pointer;position:relative;flex-shrink:0;transition:background .2s}
-.sw.on{background:#444}
-.sw::after{content:'';position:absolute;width:14px;height:14px;border-radius:50%;background:#fff;top:3px;left:3px;transition:left .2s}
-.sw.on::after{left:19px}
-.sw-lbl{font-size:13px;color:var(--text2)}
+/* COUNTER */
+.counter{font-size:10px;text-align:right;margin-top:2px;margin-bottom:6px}
+.counter.ok{color:var(--t3)}
+.counter.warn{color:#cc8800}
+.counter.over{color:#cc3300}
 
-/* Upload */
-.ubox{border:1px dashed var(--border);border-radius:var(--radius-sm);padding:12px;text-align:center;color:var(--text3);font-size:12px;cursor:pointer;position:relative;margin-bottom:6px;transition:border-color .15s}
-.ubox:hover{border-color:#444}
+/* SUGGEST DROPDOWN */
+.sug-wrap{position:relative;margin-bottom:8px}
+.sug-btn{width:100%;padding:6px 10px;border-radius:var(--rs);border:1px solid var(--bd);background:var(--s2);color:var(--t2);font-size:11px;cursor:pointer;text-align:left;font-family:'Sarabun',sans-serif;display:flex;justify-content:space-between;align-items:center;transition:all .15s}
+.sug-btn:hover{border-color:var(--bd2);color:var(--t1)}
+.sug-list{display:none;position:absolute;left:0;right:0;top:calc(100% + 3px);background:var(--s3);border:1px solid var(--bd2);border-radius:var(--rs);z-index:100;max-height:220px;overflow-y:auto;box-shadow:0 8px 24px rgba(0,0,0,.6)}
+.sug-list.open{display:block}
+.sug-item{padding:7px 10px;font-size:12px;color:var(--t2);cursor:pointer;border-bottom:1px solid var(--bd);transition:all .1s;line-height:1.4}
+.sug-item:last-child{border-bottom:none}
+.sug-item:hover{background:var(--s2);color:var(--acc)}
+
+/* SWATCHES */
+.crow{display:flex;align-items:center;gap:7px;margin-bottom:7px;flex-wrap:wrap}
+.clbl{font-size:11px;color:var(--t2);min-width:28px;flex-shrink:0}
+.swg{display:flex;gap:5px;flex-wrap:wrap}
+.sw{width:20px;height:20px;border-radius:50%;cursor:pointer;border:2px solid transparent;transition:all .2s;flex-shrink:0}
+.sw:hover{transform:scale(1.1)}
+.sw.on{border-color:#fff;transform:scale(1.25)}
+.hex-inp{width:80px;font-size:11px;padding:4px 6px}
+.hex-prev{width:18px;height:18px;border-radius:50%;border:1px solid #555;flex-shrink:0}
+
+/* SLIDER */
+.slrow{display:flex;align-items:center;gap:7px;margin-bottom:8px}
+.slrow .sl{font-size:11px;color:var(--t2);min-width:30px;flex-shrink:0}
+.slrow input[type=range]{flex:1;-webkit-appearance:none;height:3px;background:var(--bd);border-radius:2px;outline:none}
+.slrow input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:13px;height:13px;border-radius:50%;background:#fff;cursor:pointer}
+.slval{font-size:11px;font-weight:600;color:#fff;min-width:40px;text-align:right}
+
+/* LAYOUT GRID */
+.lgrp{font-size:9px;color:var(--t3);margin:7px 0 4px;letter-spacing:1px}
+.lgrid4{display:grid;grid-template-columns:repeat(4,1fr);gap:4px;margin-bottom:4px}
+.lbtn{padding:5px 3px;border-radius:var(--rs);border:1px solid var(--bd);background:var(--s2);color:var(--t3);font-size:9px;cursor:pointer;text-align:center;line-height:1.35;font-family:'Sarabun',sans-serif;transition:all .15s}
+.lbtn:hover{border-color:var(--bd2);color:var(--t2)}
+.lbtn.on{background:#1e1c00;border-color:var(--acc);color:var(--acc);font-weight:600}
+
+/* CHIPS */
+.chips{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:8px}
+.chip{padding:4px 10px;border-radius:20px;border:1px solid var(--bd);background:transparent;color:var(--t2);font-size:11px;cursor:pointer;transition:all .15s;font-family:'Sarabun',sans-serif}
+.chip:hover{border-color:var(--bd2);color:var(--t1)}
+.chip.on{background:#1e1c00;border-color:var(--acc);color:var(--acc);font-weight:600}
+
+/* TONE */
+.ttabs{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:8px}
+.ttab{padding:4px 8px;border-radius:20px;border:1px solid var(--bd);background:transparent;color:var(--t3);font-size:10px;cursor:pointer;font-family:'Sarabun',sans-serif;transition:all .15s}
+.ttab:hover{color:var(--t2);border-color:var(--bd2)}
+.ttab.on{background:#1e1c00;border-color:var(--acc);color:var(--acc)}
+.tgrid{display:grid;grid-template-columns:repeat(5,1fr);gap:3px;margin-bottom:6px}
+.tcard{padding:5px 3px;border-radius:var(--rs);border:1px solid var(--bd);background:var(--s2);cursor:pointer;text-align:center;transition:all .15s}
+.tcard:hover{border-color:var(--bd2)}
+.tcard.on{border-color:var(--acc);background:#1e1c00}
+.tcard .dot{width:16px;height:16px;border-radius:50%;margin:0 auto 3px;border:1px solid rgba(255,255,255,.1)}
+.tcard .tnm{font-size:8px;color:var(--t2);line-height:1.2}
+.tcard.on .tnm{color:var(--acc)}
+
+/* TONE WARNING */
+.tone-warn{display:none;padding:6px 10px;border-radius:var(--rs);background:#1a1000;border:1px solid #664400;color:#cc8800;font-size:11px;margin-top:6px}
+.tone-warn.show{display:block}
+
+/* LIGHT GRID */
+.lgrid2{display:grid;grid-template-columns:repeat(2,1fr);gap:5px}
+.lcard{padding:7px 8px;border-radius:var(--rs);border:1px solid var(--bd);background:var(--s2);cursor:pointer;transition:all .15s;display:flex;gap:6px;align-items:flex-start}
+.lcard:hover{border-color:var(--bd2)}
+.lcard.on{border-color:var(--acc);background:#1e1c00}
+.lcard .ico{font-size:15px;flex-shrink:0}
+.lcard .ln{font-size:11px;color:var(--t1);font-weight:600;line-height:1.2}
+.lcard .ld{font-size:9px;color:var(--t3);margin-top:1px}
+.lcard.on .ln{color:var(--acc)}
+
+/* TOGGLE */
+.togrow{display:flex;align-items:center;gap:9px;margin-bottom:7px}
+.tog{width:32px;height:17px;border-radius:9px;background:var(--bd);border:none;cursor:pointer;position:relative;flex-shrink:0;transition:background .2s}
+.tog.on{background:#3a3a00}
+.tog::after{content:'';position:absolute;width:11px;height:11px;border-radius:50%;background:#fff;top:3px;left:3px;transition:left .2s}
+.tog.on::after{left:18px}
+.toglbl{font-size:12px;color:var(--t2)}
+
+/* UPLOAD */
+.ubox{border:1px dashed var(--bd);border-radius:var(--rs);padding:9px;text-align:center;color:var(--t3);font-size:11px;cursor:pointer;position:relative;margin-bottom:5px;transition:border-color .15s}
+.ubox:hover{border-color:var(--bd2)}
 .ubox input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
-.uprev{width:100%;max-height:80px;object-fit:cover;border-radius:var(--radius-sm);display:none;margin-bottom:6px}
+.uprev{width:100%;max-height:55px;object-fit:cover;border-radius:var(--rs);display:none;margin-bottom:4px}
 
-/* Swatches */
-.sw-group{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px}
-.swatch{width:24px;height:24px;border-radius:50%;cursor:pointer;border:2px solid transparent;transition:all .15s;flex-shrink:0}
-.swatch.on{border-color:#fff;transform:scale(1.2)}
-.color-row{display:flex;align-items:center;gap:10px;margin-bottom:6px}
-.color-row .clbl{font-size:12px;color:var(--text2);min-width:36px;flex-shrink:0}
+/* AUTO MODE BTN */
+.auto-btn{width:100%;padding:10px;border-radius:var(--rs);border:1px solid var(--acc);background:#1e1c00;color:var(--acc);font-size:13px;font-weight:700;cursor:pointer;font-family:'Sarabun',sans-serif;transition:all .15s;margin-top:8px;letter-spacing:.5px}
+.auto-btn:hover{background:#2a2600}
+.auto-btn:active{transform:scale(.98)}
 
-/* Slider */
-.sl-row{display:flex;align-items:center;gap:10px;margin-bottom:8px}
-.sl-row .slbl{font-size:12px;color:var(--text2);min-width:36px;flex-shrink:0}
-.sl-row input[type=range]{flex:1;-webkit-appearance:none;height:3px;background:var(--border);border-radius:2px;outline:none}
-.sl-row input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:16px;height:16px;border-radius:50%;background:#fff;cursor:pointer}
-.sl-val{font-size:12px;font-weight:600;color:#fff;min-width:52px;text-align:right}
+/* RIGHT COL */
+.rcol{display:flex;flex-direction:column;gap:10px;position:sticky;top:14px}
+.rbox{background:var(--s1);border:1px solid var(--bd);border-radius:var(--r);overflow:hidden}
+.rbox-hdr{display:flex;justify-content:space-between;align-items:center;padding:8px 11px;border-bottom:1px solid var(--bd)}
+.rbox-lbl{font-size:9px;letter-spacing:2px;color:var(--t3);text-transform:uppercase}
+.rbox-acts{display:flex;gap:6px;align-items:center}
 
-/* Shadow toggle section */
-.shadow-sec{margin-top:8px;padding:10px;background:var(--surface2);border-radius:var(--radius-sm);border:1px solid var(--border)}
-.shadow-sec .sec-label{margin-bottom:8px}
+/* MOCK */
+.mock{width:100%;border-radius:6px;background:#0a0a0a;position:relative;overflow:hidden}
+.mock-bg{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:9px;color:rgba(255,255,255,.06);text-align:center}
+.mock-inner{position:absolute;inset:0;z-index:2;padding:6px 5px;display:flex;flex-direction:column}
+.mt{font-weight:900;line-height:1.05;text-align:center;font-family:Impact,'Arial Black',sans-serif;word-break:break-word;transition:all .2s}
+.mb-badge{font-size:7px;font-weight:700;font-family:Impact,sans-serif;letter-spacing:.5px;text-align:center;display:block;margin:2px auto;padding:1px 5px}
+.mh{line-height:1.25;text-align:center;font-weight:700;word-break:break-word;font-family:'Sarabun',sans-serif;transition:all .2s}
+.mp{flex:1;display:flex;align-items:center;justify-content:center;font-size:20px;min-height:0}
 
-/* Layout picker */
-.lgrid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:5px;margin-bottom:8px}
-.lbtn{padding:7px 4px;border-radius:var(--radius-sm);border:1px solid var(--border);background:var(--surface2);color:var(--text2);font-size:10.5px;cursor:pointer;text-align:center;line-height:1.45;font-family:'Sarabun',sans-serif;transition:all .15s}
-.lbtn:hover{border-color:#444;color:var(--text)}
-.lbtn.on{background:#1e1c00;border-color:var(--accent);color:var(--accent);font-weight:600}
+/* BUTTONS */
+.cbtn{font-size:11px;color:var(--acc);cursor:pointer;padding:3px 9px;border-radius:20px;border:1px solid #3a3000;background:transparent;font-family:'Sarabun',sans-serif;transition:all .15s}
+.cbtn:hover{background:#1e1c00}
+.fsbtn{font-size:11px;color:var(--t2);cursor:pointer;padding:3px 7px;border-radius:20px;border:1px solid var(--bd);background:transparent;font-family:'Sarabun',sans-serif;transition:all .15s}
+.fsbtn:hover{border-color:var(--bd2);color:var(--t1)}
 
-/* Chips */
-.chips{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:8px}
-.chip{padding:4px 10px;border-radius:20px;border:1px solid var(--border);background:transparent;color:var(--text2);font-size:12px;cursor:pointer;transition:all .15s;font-family:'Sarabun',sans-serif}
-.chip:hover{border-color:#444;color:var(--text)}
-.chip.on{background:#1e1c00;border-color:var(--accent);color:var(--accent);font-weight:600}
+/* PROMPT BOX */
+.out-box{padding:9px 11px;font-size:10.5px;line-height:1.7;color:#bbb;white-space:pre-wrap;max-height:500px;overflow-y:auto;font-family:'Courier New',monospace}
+.neg-box{padding:6px 11px 9px;font-size:10px;color:var(--t3);line-height:1.6;max-height:60px;overflow-y:auto}
+.sum-box{padding:9px 11px;font-size:11px;color:#bbb;line-height:1.7;white-space:pre-wrap;max-height:140px;overflow-y:auto}
 
-/* Right col */
-.sticky-col{position:sticky;top:20px;display:flex;flex-direction:column;gap:14px}
+/* SAFE ZONE */
+.sz-warn{background:#1a0a00;border:1px solid #4a2000;border-radius:var(--rs);padding:5px 9px;font-size:10px;color:#cc8800;margin-top:6px;display:none}
 
-/* Mock thumbnail */
-.mock-wrap{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:14px}
-.mock-lbl{font-size:10px;color:var(--text3);margin-bottom:10px;letter-spacing:1px;text-transform:uppercase}
-.mock{width:100%;aspect-ratio:9/16;border-radius:8px;background:#0a0a0a;position:relative;overflow:hidden}
-.mock-bg-txt{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:10px;color:rgba(255,255,255,.1);text-align:center;line-height:1.6}
-.mock-content{position:absolute;inset:0;z-index:2;padding:8px 7px;display:flex;flex-direction:column}
+/* FULLSCREEN OVERLAY */
+.fs-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.92);z-index:999;padding:20px;flex-direction:column;gap:12px}
+.fs-overlay.open{display:flex}
+.fs-close{align-self:flex-end;padding:6px 16px;border-radius:20px;border:1px solid var(--bd2);background:var(--s2);color:var(--t1);cursor:pointer;font-family:'Sarabun',sans-serif;font-size:13px}
+.fs-content{flex:1;background:var(--s1);border-radius:var(--r);border:1px solid var(--bd);padding:16px;overflow-y:auto;font-size:12px;line-height:1.8;color:#ccc;white-space:pre-wrap;font-family:'Courier New',monospace}
+.fs-copy{padding:10px 24px;border-radius:var(--rs);border:none;background:var(--acc);color:#000;font-size:13px;font-weight:700;cursor:pointer;font-family:'Sarabun',sans-serif;align-self:flex-end}
 
-/* Mock text — NO background strips */
-.mt{
-  font-weight:900;line-height:1.05;text-align:center;
-  font-family:Impact,'Arial Black',sans-serif;
-  word-break:break-word;transition:all .2s;
-  text-shadow:2px 2px 6px rgba(0,0,0,.9),0 0 12px rgba(0,0,0,.7);
-  /* NO background, NO padding strip */
-}
-.mb{
-  font-size:8px;font-weight:700;
-  font-family:Impact,sans-serif;letter-spacing:.5px;
-  text-align:center;display:block;margin:2px auto;
-  background:#FFD600;color:#000;
-  padding:1px 6px;
-  /* badge pill รูปแบบเดิม — แต่เป็นแค่ badge เล็กๆ */
-}
-.mh{
-  line-height:1.25;text-align:center;
-  font-weight:700;word-break:break-word;transition:all .2s;
-  font-family:'Sarabun',sans-serif;
-  text-shadow:2px 2px 8px rgba(0,0,0,.95),0 0 16px rgba(0,0,0,.8);
-  /* NO background strip */
-}
-.mp{flex:1;display:flex;align-items:center;justify-content:center;font-size:28px;min-height:0}
-
-/* Output */
-.out-wrap{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden}
-.out-hdr{display:flex;justify-content:space-between;align-items:center;padding:12px 14px;border-bottom:1px solid var(--border)}
-.out-lbl{font-size:10px;letter-spacing:2px;color:var(--text3);text-transform:uppercase;font-weight:500}
-.copy-btn{font-size:11px;color:var(--accent);cursor:pointer;padding:3px 10px;border-radius:20px;border:1px solid #3a3000;background:transparent;font-family:'Sarabun',sans-serif;transition:all .15s}
-.copy-btn:hover{background:#1e1c00}
-.out-box{padding:12px 14px;font-size:11.5px;line-height:1.75;color:#ccc;white-space:pre-wrap;max-height:220px;overflow-y:auto;font-family:'Courier New',monospace}
-.neg-hdr{display:flex;justify-content:space-between;align-items:center;padding:8px 14px;border-top:1px solid var(--border)}
-.neg-box{padding:8px 14px 12px;font-size:11px;color:var(--text3);line-height:1.6;max-height:70px;overflow-y:auto}
-
-.note{font-size:11px;color:var(--text3);line-height:1.5;margin-top:4px}
-.divider{border:none;border-top:1px solid var(--border);margin:.8rem 0}
-
-/* Info badge */
-.info-tag{display:inline-block;padding:2px 8px;border-radius:4px;background:#1e3a1e;border:1px solid #2a5a2a;color:#4ade80;font-size:10px;margin-bottom:8px}
-
-@media(max-width:700px){
-  .grid{grid-template-columns:1fr}
-  .sticky-col{position:static}
-}
+.note{font-size:10px;color:var(--t3);line-height:1.5;margin-top:3px}
+@media(max-width:750px){.main{grid-template-columns:1fr}.rcol{position:static}.lgrid4{grid-template-columns:repeat(3,1fr)}.tgrid{grid-template-columns:repeat(4,1fr)}}
 </style>
 </head>
 <body>
 <div class="app">
-  <div class="app-header">
-    <div class="label">Prompt Builder</div>
-    <h1>TikTok Thumbnail Prompt Generator</h1>
-    <p>กรอกข้อมูล → Copy Prompt → ใช้กับ GPT-4o / Gemini ImageFX ได้เลย</p>
+
+<div class="hdr">
+  <div class="hdr-l">
+    <div class="sub">Prompt Builder</div>
+    <h1>PicPrompt Pro</h1>
+    <div class="th">โปรสร้างปก v4 — GPT-4o Thumbnail Generator</div>
   </div>
+  <span class="ver">v4.0</span>
+</div>
 
-  <div class="grid">
-    <!-- LEFT FORM -->
-    <div class="panel">
+<!-- STEPS -->
+<div class="steps" id="steps">
+  <div class="step on" id="st1"><span class="sn">①</span><span class="sl">เลือกหมวด</span></div>
+  <div class="step" id="st2"><span class="sn">②</span><span class="sl">ข้อความ</span></div>
+  <div class="step" id="st3"><span class="sn">③</span><span class="sl">สไตล์</span></div>
+  <div class="step" id="st4"><span class="sn">④</span><span class="sl">Copy Prompt</span></div>
+</div>
 
-      <!-- บริบท -->
-      <div class="panel-sec">
-        <div class="sec-label">บริบทคอนเทนต์</div>
-        <div class="row">
-          <div class="f"><label>รูปแบบ</label>
-            <select id="stype" onchange="build()">
-              <option value="solo">Solo Creator / Coach (1 คน)</option>
-              <option value="podcast">Podcast / Talk Show (2 คน)</option>
-              <option value="sales">Sales Training</option>
-              <option value="case">Case Study / Untold Story</option>
-              <option value="promo">โปรโมท Course / Workshop</option>
-              <option value="news">News / Trend / Insight</option>
-            </select>
-          </div>
-          <div class="f"><label>จำนวนคน</label>
-            <select id="scnt" onchange="build()">
-              <option value="1">1 คน</option>
-              <option value="2">2 คน</option>
-              <option value="0">ไม่มีคน</option>
-            </select>
-          </div>
-        </div>
-        <div class="row">
-          <div class="f"><label>เพศ</label>
-            <select id="sgdr" onchange="build()">
-              <option value="f">หญิง</option>
-              <option value="m">ชาย</option>
-              <option value="f-m">หญิง + ชาย</option>
-              <option value="m-f">ชาย + หญิง</option>
-              <option value="m-m">ชาย + ชาย</option>
-              <option value="f-f">หญิง + หญิง</option>
-            </select>
-          </div>
-          <div class="f"><label>อารมณ์</label>
-            <select id="sexpr" onchange="build()">
-              <option value="confident">มั่นใจ / Authority</option>
-              <option value="power">Empowered / พลัง</option>
-              <option value="contrast">จริงจัง + ยิ้ม</option>
-              <option value="serious">จริงจัง</option>
-              <option value="smile">ยิ้ม / Friendly</option>
-            </select>
-          </div>
-          <div class="f"><label>แต่งตัว</label>
-            <select id="sout" onchange="build()">
-              <option value="blazer">Business Blazer</option>
-              <option value="smart">Smart Casual</option>
-              <option value="formal">Formal Suit</option>
-              <option value="casual">Casual</option>
-            </select>
-          </div>
-        </div>
-        <div class="sw-row">
-          <button class="sw" id="swup" onclick="togUp()"></button>
-          <span class="sw-lbl" id="swup-l">ให้ AI สร้างคน</span>
-        </div>
-        <div id="up-p" style="display:none">
-          <div class="ubox">
-            <img id="pp" class="uprev">
-            <div>📤 Upload รูปคนที่ต้องการ</div>
-            <input type="file" accept="image/*" onchange="pv(event,'pp')">
-          </div>
-          <div class="note">Upload รูปนี้พร้อม Prompt ไปใน GPT-4o — ระบบจะ composite หน้าคนเข้าภาพ</div>
-        </div>
+<!-- PLATFORM -->
+<div class="ptabs" id="ptabs">
+  <button class="ptab on" onclick="setPF(this,'fb','4/5',0)">📘 Facebook<span class="r">4:5</span></button>
+  <button class="ptab" onclick="setPF(this,'reel','9/16',1)">🎬 TikTok/Reel<span class="r">9:16</span></button>
+  <button class="ptab" onclick="setPF(this,'ig','1/1',0)">📷 IG Post<span class="r">1:1</span></button>
+  <button class="ptab" onclick="setPF(this,'igs','9/16',1)">✨ IG Story<span class="r">9:16</span></button>
+  <button class="ptab" onclick="setPF(this,'yt','16/9',0)">▶️ YouTube<span class="r">16:9</span></button>
+  <button class="ptab" onclick="setPF(this,'banner','3/1',0)">🖼️ Banner<span class="r">3:1</span></button>
+</div>
+
+<div class="main">
+<div>
+
+<!-- SEC 1: PRESET -->
+<div class="acc" id="acc1">
+  <div class="acc-hdr open" onclick="toggleAcc('acc1')">
+    <div class="ah-l"><div class="anum">1</div><span class="atitle">หมวดบทความ</span><span class="asub">เลือกหมวด → Auto Mode</span></div>
+    <span class="arr">▼</span>
+  </div>
+  <div class="acc-body open">
+    <div class="mb8"><label>เลือกหมวด</label>
+      <select id="scat" onchange="onCatChange()">
+        <option value="sales">💼 Sales & Training</option>
+        <option value="insurance">🛡️ Insurance & Finance</option>
+        <option value="counseling">🧠 Counseling & Wellness</option>
+        <option value="ai">🤖 AI & Technology</option>
+        <option value="biz">📈 Business & Leadership</option>
+        <option value="self">🌱 Self Development</option>
+        <option value="news">💡 News & Insight</option>
+        <option value="mkt">🎯 Marketing & Branding</option>
+        <option value="moti">💬 Motivation & Inspiration</option>
+        <option value="edu">🎓 Education & How-to</option>
+      </select>
+    </div>
+    <button class="auto-btn" onclick="autoMode()">✨ Auto Mode — เซ็ตทุกอย่างอัตโนมัติ</button>
+  </div>
+</div>
+
+<!-- SEC 2: TEXT -->
+<div class="acc" id="acc2">
+  <div class="acc-hdr open" onclick="toggleAcc('acc2')">
+    <div class="ah-l"><div class="anum">2</div><span class="atitle">ข้อความ 3 ส่วน</span><span class="asub">Title / Headline / Badge</span></div>
+    <span class="arr">▼</span>
+  </div>
+  <div class="acc-body open">
+    <div class="mb8">
+      <label>① Title ใหญ่ (EN)</label>
+      <div class="sug-wrap">
+        <button class="sug-btn" onclick="toggleSug('sug-title')">💡 Title แนะนำ 10 คำ <span>▼</span></button>
+        <div class="sug-list" id="sug-title"></div>
       </div>
-
-      <!-- TITLE -->
-      <div class="panel-sec">
-        <div class="sec-label">Title ใหญ่ (ภาษาอังกฤษ)</div>
-        <div class="info-tag">✦ ข้อความลอยบนพื้นหลัง — ไม่มีแถบสีดำ</div>
-        <input type="text" id="ititle" placeholder="เช่น AI FOR WORK / GLOCAL / SALES MASTER" oninput="build()" style="margin-bottom:10px">
-        <div class="color-row">
-          <span class="clbl">สี</span>
-          <div class="sw-group" id="tc">
-            <div class="swatch on" style="background:#CC0000" data-c="#CC0000" onclick="pc('tc',this,'t')" title="แดง BSG"></div>
-            <div class="swatch" style="background:#FFD600" data-c="#FFD600" onclick="pc('tc',this,'t')" title="เหลือง"></div>
-            <div class="swatch" style="background:#ffffff;outline:1px solid #444" data-c="#ffffff" onclick="pc('tc',this,'t')" title="ขาว"></div>
-            <div class="swatch" style="background:#FF6B00" data-c="#FF6B00" onclick="pc('tc',this,'t')" title="ส้ม"></div>
-            <div class="swatch" style="background:#1565C0" data-c="#1565C0" onclick="pc('tc',this,'t')" title="น้ำเงิน"></div>
-            <div class="swatch" style="background:#22C55E" data-c="#22C55E" onclick="pc('tc',this,'t')" title="เขียว"></div>
-            <div class="swatch" style="background:#A855F7" data-c="#A855F7" onclick="pc('tc',this,'t')" title="ม่วง"></div>
-          </div>
+      <input type="text" id="ititle" placeholder="SALES MASTER / AI FOR WORK / NEVER GIVE UP">
+      <div class="counter ok" id="cnt-title">0 / 20 ตัวอักษร</div>
+      <div class="crow">
+        <span class="clbl">สี</span>
+        <div class="swg" id="tc">
+          <div class="sw on" style="background:#CC0000" data-c="#CC0000" data-g="#CC0000"></div>
+          <div class="sw" style="background:#FFD600" data-c="#FFD600" data-g="#FFD600"></div>
+          <div class="sw" style="background:#fff;outline:1px solid #444" data-c="#ffffff" data-g="#ffffff"></div>
+          <div class="sw" style="background:#FF6B00" data-c="#FF6B00" data-g="#FF6B00"></div>
+          <div class="sw" style="background:#1565C0" data-c="#1565C0" data-g="#1565C0"></div>
+          <div class="sw" style="background:#22C55E" data-c="#22C55E" data-g="#22C55E"></div>
+          <div class="sw" style="background:#A855F7" data-c="#A855F7" data-g="#A855F7"></div>
+          <div class="sw" style="background:#00BCD4" data-c="#00BCD4" data-g="#00BCD4"></div>
         </div>
-        <div class="sl-row">
-          <span class="slbl">ขนาด</span>
-          <input type="range" min="1" max="5" step="1" value="3" id="tsz" oninput="build()">
-          <span class="sl-val" id="tsz-v">กลาง</span>
-        </div>
-        <div class="shadow-sec">
-          <div class="sec-label">Text Shadow (เพื่อให้อ่านออกบนพื้นหลัง)</div>
-          <div class="chips" id="tsh">
-            <div class="chip on" onclick="csh('tsh',this,'t','strong')">Shadow แรง</div>
-            <div class="chip" onclick="csh('tsh',this,'t','medium')">Shadow กลาง</div>
-            <div class="chip" onclick="csh('tsh',this,'t','glow')">Glow เรืองแสง</div>
-            <div class="chip" onclick="csh('tsh',this,'t','outline')">Outline ขอบ</div>
-            <div class="chip" onclick="csh('tsh',this,'t','none')">ไม่มี Shadow</div>
-          </div>
-        </div>
+        <input type="text" id="tc-hex" class="hex-inp" value="#CC0000" maxlength="7" oninput="setHex('t',this.value)">
+        <div class="hex-prev" id="tc-prev" style="background:#CC0000"></div>
       </div>
+      <div class="slrow"><span class="sl">ขนาด</span><input type="range" min="1" max="5" value="3" id="tsz"><span class="slval" id="tsz-v">กลาง</span></div>
+    </div>
 
-      <!-- HEADLINE -->
-      <div class="panel-sec">
-        <div class="sec-label">Headline ภาษาไทย</div>
-        <div class="info-tag">✦ ข้อความลอยบนพื้นหลัง — ไม่มีแถบสีดำ</div>
-        <textarea id="ithai" placeholder='เช่น AI เพื่อคนทำงาน "จริง"&#10;หรือ วันนี้องค์กรของคุณ มี AI ช่วยงานแล้วหรือยัง' oninput="build()" style="margin-bottom:10px"></textarea>
-        <div class="color-row">
-          <span class="clbl">สี</span>
-          <div class="sw-group" id="hc">
-            <div class="swatch" style="background:#CC0000" data-c="#CC0000" onclick="pc('hc',this,'h')" title="แดง BSG"></div>
-            <div class="swatch" style="background:#FFD600" data-c="#FFD600" onclick="pc('hc',this,'h')" title="เหลือง"></div>
-            <div class="swatch on" style="background:#ffffff;outline:1px solid #444" data-c="#ffffff" onclick="pc('hc',this,'h')" title="ขาว"></div>
-            <div class="swatch" style="background:#FF6B00" data-c="#FF6B00" onclick="pc('hc',this,'h')" title="ส้ม"></div>
-            <div class="swatch" style="background:#1565C0" data-c="#1565C0" onclick="pc('hc',this,'h')" title="น้ำเงิน"></div>
-            <div class="swatch" style="background:#22C55E" data-c="#22C55E" onclick="pc('hc',this,'h')" title="เขียว"></div>
-          </div>
-        </div>
-        <div class="sl-row">
-          <span class="slbl">ขนาด</span>
-          <input type="range" min="1" max="5" step="1" value="3" id="hsz" oninput="build()">
-          <span class="sl-val" id="hsz-v">กลาง</span>
-        </div>
-        <div class="color-row" style="margin-top:4px">
-          <span class="clbl" style="font-size:11px">Quote<br>สี</span>
-          <div class="sw-group" id="qc">
-            <div class="swatch on" style="background:#CC0000" data-c="#CC0000" onclick="pc('qc',this,'q')" title="แดง"></div>
-            <div class="swatch" style="background:#FFD600" data-c="#FFD600" onclick="pc('qc',this,'q')" title="เหลือง"></div>
-            <div class="swatch" style="background:#FF6B00" data-c="#FF6B00" onclick="pc('qc',this,'q')" title="ส้ม"></div>
-            <div class="swatch" style="background:#ffffff;outline:1px solid #444" data-c="#ffffff" onclick="pc('qc',this,'q')" title="ขาว"></div>
-            <div class="swatch" style="background:#22C55E" data-c="#22C55E" onclick="pc('qc',this,'q')" title="เขียว"></div>
-          </div>
-        </div>
-        <div class="shadow-sec">
-          <div class="sec-label">Text Shadow (เพื่อให้อ่านออกบนพื้นหลัง)</div>
-          <div class="chips" id="hsh">
-            <div class="chip on" onclick="csh('hsh',this,'h','strong')">Shadow แรง</div>
-            <div class="chip" onclick="csh('hsh',this,'h','medium')">Shadow กลาง</div>
-            <div class="chip" onclick="csh('hsh',this,'h','glow')">Glow เรืองแสง</div>
-            <div class="chip" onclick="csh('hsh',this,'h','outline')">Outline ขอบ</div>
-            <div class="chip" onclick="csh('hsh',this,'h','none')">ไม่มี Shadow</div>
-          </div>
-        </div>
+    <div class="mb8">
+      <label>② Headline ภาษาไทย</label>
+      <div class="sug-wrap">
+        <button class="sug-btn" onclick="toggleSug('sug-hl')">💡 Headline แนะนำ 10 คำ <span>▼</span></button>
+        <div class="sug-list" id="sug-hl"></div>
       </div>
-
-      <!-- BADGE + LAYOUT -->
-      <div class="panel-sec">
-        <div class="sec-label">Sub-label / Badge</div>
-        <div class="note" style="margin-bottom:6px">Badge ยังคงมีพื้น #FFD600 เพื่อความโดดเด่น (pill shape เล็กๆ)</div>
-        <input type="text" id="ibadge" placeholder="เช่น AI FOR WORK / EP.01 / BSG METHOD" oninput="build()">
+      <textarea id="ithai" rows="2" placeholder='ปิดการขายได้ "ทุกสถานการณ์"'></textarea>
+      <div class="counter ok" id="cnt-hl">0 / 40 ตัวอักษร</div>
+      <div class="crow">
+        <span class="clbl">สี</span>
+        <div class="swg" id="hc">
+          <div class="sw" style="background:#CC0000" data-c="#CC0000" data-g="#CC0000"></div>
+          <div class="sw" style="background:#FFD600" data-c="#FFD600" data-g="#FFD600"></div>
+          <div class="sw on" style="background:#fff;outline:1px solid #444" data-c="#ffffff" data-g="#ffffff"></div>
+          <div class="sw" style="background:#FF6B00" data-c="#FF6B00" data-g="#FF6B00"></div>
+          <div class="sw" style="background:#1565C0" data-c="#1565C0" data-g="#1565C0"></div>
+          <div class="sw" style="background:#22C55E" data-c="#22C55E" data-g="#22C55E"></div>
+        </div>
+        <input type="text" id="hc-hex" class="hex-inp" value="#ffffff" maxlength="7" oninput="setHex('h',this.value)">
+        <div class="hex-prev" id="hc-prev" style="background:#ffffff;outline:1px solid #444"></div>
       </div>
-
-      <div class="panel-sec">
-        <div class="sec-label">ตำแหน่งข้อความ — คนอยู่กลางเสมอ</div>
-        <div class="lgrid" id="pgrid">
-          <button class="lbtn" onclick="pp2(this,'top-mid-bot')">Title บน<br>คนกลาง<br>Headline ล่าง</button>
-          <button class="lbtn on" onclick="pp2(this,'top-bot')">Title+Badge บน<br>คนกลาง<br>Headline ล่าง</button>
-          <button class="lbtn" onclick="pp2(this,'all-top')">ทุกอย่างบน<br>คนล่าง</button>
-          <button class="lbtn" onclick="pp2(this,'all-bot')">คนบน<br>ทุกอย่างล่าง</button>
-          <button class="lbtn" onclick="pp2(this,'split-lr')">คนขวา<br>ตัวหนังสือซ้าย</button>
-          <button class="lbtn" onclick="pp2(this,'overlay')">ข้อความซ้อน<br>บนคน</button>
+      <div class="crow">
+        <span class="clbl">Quote</span>
+        <div class="swg" id="qc">
+          <div class="sw on" style="background:#CC0000" data-c="#CC0000" data-g="#CC0000"></div>
+          <div class="sw" style="background:#FFD600" data-c="#FFD600" data-g="#FFD600"></div>
+          <div class="sw" style="background:#FF6B00" data-c="#FF6B00" data-g="#FF6B00"></div>
+          <div class="sw" style="background:#fff;outline:1px solid #444" data-c="#ffffff" data-g="#ffffff"></div>
         </div>
+        <input type="text" id="qc-hex" class="hex-inp" value="#CC0000" maxlength="7" oninput="setHex('q',this.value)">
+        <div class="hex-prev" id="qc-prev" style="background:#CC0000"></div>
       </div>
+      <div class="slrow"><span class="sl">ขนาด</span><input type="range" min="1" max="5" value="3" id="hsz"><span class="slval" id="hsz-v">กลาง</span></div>
+    </div>
 
-      <!-- BG -->
-      <div class="panel-sec">
-        <div class="sec-label">พื้นหลัง</div>
-        <div class="sw-row">
-          <button class="sw" id="swbg" onclick="togBg()"></button>
-          <span class="sw-lbl" id="swbg-l">ให้ AI สร้างพื้นหลัง</span>
+    <div>
+      <label>③ Badge / Sub-label</label>
+      <input type="text" id="ibadge" placeholder="BSG INSIGHT / EP.01 / AI FOR WORK" class="mb8">
+      <div class="crow">
+        <span class="clbl">BG</span>
+        <div class="swg" id="bbc">
+          <div class="sw on" style="background:#FFD600" data-c="#FFD600" onclick="setBadge('bg',this,'#FFD600')"></div>
+          <div class="sw" style="background:#CC0000" data-c="#CC0000" onclick="setBadge('bg',this,'#CC0000')"></div>
+          <div class="sw" style="background:#1565C0" data-c="#1565C0" onclick="setBadge('bg',this,'#1565C0')"></div>
+          <div class="sw" style="background:#22C55E" data-c="#22C55E" onclick="setBadge('bg',this,'#22C55E')"></div>
+          <div class="sw" style="background:#111;outline:1px solid #555" data-c="#111111" onclick="setBadge('bg',this,'#111111')"></div>
+          <div class="sw" style="background:#fff;outline:1px solid #444" data-c="#ffffff" onclick="setBadge('bg',this,'#ffffff')"></div>
         </div>
-        <div id="bg-chips-sec">
-          <div class="chips" id="bgc">
-            <div class="chip on" onclick="cbg(this,'urban')">เมือง / ถนน</div>
-            <div class="chip" onclick="cbg(this,'office')">ออฟฟิศ</div>
-            <div class="chip" onclick="cbg(this,'store')">ร้านค้า / ตลาด</div>
-            <div class="chip" onclick="cbg(this,'studio')">Studio มืด</div>
-            <div class="chip" onclick="cbg(this,'conf')">ห้องประชุม</div>
-            <div class="chip" onclick="cbg(this,'nature')">ธรรมชาติ</div>
-            <div class="chip" onclick="cbg(this,'abstract')">Abstract</div>
-            <div class="chip" onclick="cbg(this,'factory')">โรงงาน</div>
-          </div>
-        </div>
-        <div id="bg-up-sec" style="display:none">
-          <div class="ubox">
-            <img id="pb2" class="uprev">
-            <div>🖼️ Upload รูปพื้นหลัง</div>
-            <input type="file" accept="image/*" onchange="pv(event,'pb2')">
-          </div>
-          <div class="note">GPT-4o จะ composite คนและ typography ลงบนรูปนี้</div>
-        </div>
+        <input type="text" id="bbc-hex" class="hex-inp" value="#FFD600" maxlength="7" oninput="setBadgeHex('bg',this.value)">
       </div>
-
-      <!-- MOOD -->
-      <div class="panel-sec">
-        <div class="sec-label">โทนภาพ & แสง</div>
-        <div class="row">
-          <div class="f"><label>โทนสี</label>
-            <select id="stone" onchange="build()">
-              <option value="dark-red">Dark + Red Glow (BSG)</option>
-              <option value="dark-cinematic">Dark Cinematic</option>
-              <option value="dark-gold">Dark + Gold Tone</option>
-              <option value="dark-cool">Dark + Cool Blue</option>
-              <option value="dark-warm">Dark + Warm Amber</option>
-              <option value="high-contrast">High Contrast B&W</option>
-              <option value="moody-grey">Moody Grey</option>
-              <option value="clean-dark">Clean Dark</option>
-            </select>
-          </div>
-          <div class="f"><label>แสง</label>
-            <select id="slight" onchange="build()">
-              <option value="dramatic">Dramatic Spotlight</option>
-              <option value="rim">Rim Light</option>
-              <option value="side">Cinematic Side</option>
-              <option value="ambient">Ambient Dark</option>
-              <option value="backlit">Backlit</option>
-              <option value="edge">Edge Glow</option>
-            </select>
-          </div>
+      <div class="crow">
+        <span class="clbl">Text</span>
+        <div class="swg" id="btc">
+          <div class="sw on" style="background:#000;outline:1px solid #555" data-c="#000000" onclick="setBadge('txt',this,'#000000')"></div>
+          <div class="sw" style="background:#fff;outline:1px solid #444" data-c="#ffffff" onclick="setBadge('txt',this,'#ffffff')"></div>
+          <div class="sw" style="background:#FFD600" data-c="#FFD600" onclick="setBadge('txt',this,'#FFD600')"></div>
+          <div class="sw" style="background:#CC0000" data-c="#CC0000" onclick="setBadge('txt',this,'#CC0000')"></div>
         </div>
-        <div class="row">
-          <div class="f"><label>Grain / Texture</label>
-            <select id="sgrain" onchange="build()">
-              <option value="film">Film Grain</option>
-              <option value="clean">Clean (ไม่มี Grain)</option>
-              <option value="gritty">Gritty Heavy</option>
-              <option value="noise">Subtle Noise</option>
-            </select>
-          </div>
-          <div class="f"><label>Vignette</label>
-            <select id="svig" onchange="build()">
-              <option value="strong">Strong</option>
-              <option value="subtle">Subtle</option>
-              <option value="none">None</option>
-            </select>
-          </div>
-        </div>
+        <input type="text" id="btc-hex" class="hex-inp" value="#000000" maxlength="7" oninput="setBadgeHex('txt',this.value)">
       </div>
-
-    </div><!-- /panel -->
-
-    <!-- RIGHT COL -->
-    <div class="sticky-col">
-
-      <div class="mock-wrap">
-        <div class="mock-lbl">Preview Layout</div>
-        <div class="mock" id="mock">
-          <div class="mock-bg-txt">Background Zone</div>
-          <div class="mock-content" id="mc"></div>
-        </div>
-      </div>
-
-      <div class="out-wrap">
-        <div class="out-hdr">
-          <span class="out-lbl">Prompt</span>
-          <button class="copy-btn" onclick="co('ob','Copy Prompt')">Copy Prompt</button>
-        </div>
-        <div class="out-box" id="ob">กรอกข้อมูลด้านซ้าย Prompt จะปรากฏที่นี่อัตโนมัติ</div>
-        <div class="neg-hdr">
-          <span class="out-lbl">Negative Prompt</span>
-          <button class="copy-btn" onclick="co('nb','Copy')">Copy</button>
-        </div>
-        <div class="neg-box" id="nb"></div>
-      </div>
-
     </div>
   </div>
 </div>
 
-<script>
-var TC='#CC0000',HC='#ffffff',QC='#CC0000',BG='urban',POS='top-bot',UPM=false,BGM=false;
-var TSH='strong', HSH='strong'; // text shadow defaults
-var SZL=['เล็กมาก','เล็ก','กลาง','ใหญ่','ใหญ่มาก'];
-var SZP=[
-  'VERY SMALL — title occupies ~13% of image height. Text is compact, minimal. Lots of breathing room for subject.',
-  'SMALL — title occupies ~18% of image height. Readable but not dominant. Subject has clear visual space.',
-  'MEDIUM — title occupies ~25% of image height. Balanced with subject. Standard thumbnail proportion.',
-  'LARGE — title occupies ~35% of image height. Bold and prominent. Subject still clearly visible.',
-  'VERY LARGE — title occupies ~48% of image height. Typography is the hero element. Subject is secondary.'
-];
+<!-- SEC 3: LAYOUT -->
+<div class="acc" id="acc3">
+  <div class="acc-hdr" onclick="toggleAcc('acc3')">
+    <div class="ah-l"><div class="anum">3</div><span class="atitle">Layout</span><span class="asub">25 แบบ</span></div>
+    <span class="arr">▼</span>
+  </div>
+  <div class="acc-body">
+    <div class="lgrp">👤 1 คน — คนกลาง</div>
+    <div class="lgrid4" id="lgrid">
+      <button class="lbtn on" onclick="setL(this,'T-P-H')">Title บน<br>คนกลาง<br>Headline ล่าง</button>
+      <button class="lbtn" onclick="setL(this,'TB-P-H')">Title+Badge บน<br>คนกลาง<br>Headline ล่าง</button>
+      <button class="lbtn" onclick="setL(this,'TBH-P')">ทุกอย่างบน<br>คนล่าง</button>
+      <button class="lbtn" onclick="setL(this,'P-TBH')">คนบน<br>ทุกอย่างล่าง</button>
+      <button class="lbtn" onclick="setL(this,'T-P-BH')">Title บน<br>คนกลาง<br>Badge+HL ล่าง</button>
+      <button class="lbtn" onclick="setL(this,'TB-P')">Title+Badge บน<br>คนล่าง</button>
+      <button class="lbtn" onclick="setL(this,'P-H')">คนบน<br>Headline ล่าง</button>
+      <button class="lbtn" onclick="setL(this,'T-P')">Title บน<br>คนล่าง</button>
+    </div>
+    <div class="lgrp">↔️ แบ่งซ้าย-ขวา</div>
+    <div class="lgrid4">
+      <button class="lbtn" onclick="setL(this,'SL-PR')">ข้อความซ้าย<br>คนขวา</button>
+      <button class="lbtn" onclick="setL(this,'PL-SR')">คนซ้าย<br>ข้อความขวา</button>
+      <button class="lbtn" onclick="setL(this,'SL-PR-B')">ข้อความซ้าย<br>คนขวา+Badge</button>
+      <button class="lbtn" onclick="setL(this,'PL-SR-B')">คนซ้าย<br>ข้อความขวา+Badge</button>
+    </div>
+    <div class="lgrp">🔲 Overlay ซ้อนบนคน</div>
+    <div class="lgrid4">
+      <button class="lbtn" onclick="setL(this,'OV-T')">Title ซ้อนบน<br>Headline ล่าง</button>
+      <button class="lbtn" onclick="setL(this,'OV-B')">Title บน<br>Headline ซ้อนล่าง</button>
+      <button class="lbtn" onclick="setL(this,'OV-TB')">Title+Badge ซ้อนบน<br>Headline ซ้อนล่าง</button>
+      <button class="lbtn" onclick="setL(this,'OV-C')">ทุกอย่างซ้อนกลาง</button>
+    </div>
+    <div class="lgrp">👥 2+ คน / ทีม</div>
+    <div class="lgrid4">
+      <button class="lbtn" onclick="setL(this,'2P-T-H')">Title บน<br>2 คนกลาง<br>Headline ล่าง</button>
+      <button class="lbtn" onclick="setL(this,'2P-TBH')">ข้อความบน<br>2 คนล่าง</button>
+      <button class="lbtn" onclick="setL(this,'2P-P-TBH')">2 คนบน<br>ข้อความล่าง</button>
+      <button class="lbtn" onclick="setL(this,'2P-OV')">2 คน+ข้อความซ้อน</button>
+    </div>
+    <div class="lgrp">📝 ไม่มีคน</div>
+    <div class="lgrid4">
+      <button class="lbtn" onclick="setL(this,'NO-C')">ข้อความกลาง</button>
+      <button class="lbtn" onclick="setL(this,'NO-T')">ข้อความบน</button>
+      <button class="lbtn" onclick="setL(this,'NO-B')">ข้อความล่าง</button>
+      <button class="lbtn" onclick="setL(this,'NO-BIG')">Title ใหญ่มาก</button>
+      <button class="lbtn" onclick="setL(this,'NO-LR')">ข้อความซ้าย<br>กราฟิกขวา</button>
+    </div>
+  </div>
+</div>
 
-// Shadow descriptions for prompt
-var SHD={
-  strong:'strong black drop shadow (offset: 3px 3px, blur: 8px) plus additional dark outer glow (blur: 20px) for maximum legibility on any background. No background bar or strip behind text.',
-  medium:'medium drop shadow (offset: 2px 2px, blur: 6px, color: rgba(0,0,0,0.85)) for clean readability. No background bar or strip behind text.',
-  glow:'colored glow effect matching the text color, spread 0 0 20px, plus subtle dark drop shadow for depth. No background bar or strip behind text.',
-  outline:'text stroke outline in black (1-2px), high contrast edge. No background bar or strip behind text.',
-  none:'no shadow or outline. Text color must be strong enough to read against the background naturally. No background bar or strip behind text.'
+<!-- SEC 4: PERSON -->
+<div class="acc" id="acc4">
+  <div class="acc-hdr" onclick="toggleAcc('acc4')">
+    <div class="ah-l"><div class="anum">4</div><span class="atitle">คนในภาพ</span><span class="asub">ประเภท / อารมณ์ / ชุด / กล้อง</span></div>
+    <span class="arr">▼</span>
+  </div>
+  <div class="acc-body">
+    <div class="row2">
+      <div class="f"><label>ประเภท / ทีม</label>
+        <select id="scnt">
+          <optgroup label="Solo"><option value="solo-f">Solo หญิง</option><option value="solo-m">Solo ชาย</option><option value="solo-n">Solo ไม่ระบุ</option></optgroup>
+          <optgroup label="ทีม"><option value="team-f2">ทีมหญิง 2 คน</option><option value="team-m2">ทีมชาย 2 คน</option><option value="team-mix2">ทีมผสม 2 คน</option><option value="team-f3">ทีมหญิง 3 คน</option><option value="team-m3">ทีมชาย 3 คน</option><option value="team-mix3">ทีมผสม 3 คน</option><option value="team-big">ทีมใหญ่ 4+</option></optgroup>
+          <optgroup label="ไม่มีคน"><option value="none">ไม่มีคน</option></optgroup>
+        </select>
+      </div>
+    </div>
+    <div class="row2">
+      <div class="f"><label>อารมณ์</label>
+        <select id="sexpr">
+          <option value="confident">มั่นใจ / Authority</option><option value="power">พลัง / Energetic</option><option value="contrast">จริงจัง + ยิ้ม</option><option value="serious">จริงจัง</option><option value="smile">ยิ้ม / Friendly</option><option value="surprise">ตกใจ / Surprised</option><option value="thinking">คิด / Thinking</option><option value="pointing">ชี้กล้อง</option><option value="laughing">หัวเราะ</option><option value="empowered">ฮีโร่ / Empowered</option><option value="calm">สงบ / Calm</option><option value="curious">อยากรู้</option>
+        </select>
+      </div>
+      <div class="f"><label>ชุด</label>
+        <select id="sout">
+          <option value="blazer">Business Blazer</option><option value="smart">Smart Casual</option><option value="formal">Formal Suit</option><option value="casual">Casual</option><option value="thai">ชุดไทย</option><option value="sport">Sport</option><option value="doctor">Doctor / Expert</option><option value="hoodie">Hoodie</option><option value="uniform">Uniform</option><option value="evening">Evening Gown</option><option value="denim">Denim</option><option value="tshirt">T-Shirt</option>
+        </select>
+      </div>
+    </div>
+    <div class="row2">
+      <div class="f"><label>ระยะกล้อง</label>
+        <select id="scam"><option value="medium">Medium (ครึ่งตัว)</option><option value="close">Close-up (ใบหน้า)</option><option value="full">Full Body</option><option value="wide">Wide Shot</option><option value="bust">Bust Shot</option></select>
+      </div>
+      <div class="f"><label>มุมกล้อง</label>
+        <select id="sang"><option value="eye">Eye Level</option><option value="low">Low Angle</option><option value="high">High Angle</option><option value="dutch">Dutch Angle</option><option value="front">Straight Front</option></select>
+      </div>
+    </div>
+    <div class="togrow"><button class="tog" id="swup" onclick="togUp()"></button><span class="toglbl" id="swup-l">ให้ AI สร้างคน</span></div>
+    <div id="up-p" style="display:none"><div class="ubox"><img id="pp" class="uprev"><div>📤 Upload รูปคน</div><input type="file" accept="image/*" onchange="pv(event,'pp')"></div></div>
+  </div>
+</div>
+
+<!-- SEC 5: BG -->
+<div class="acc" id="acc5">
+  <div class="acc-hdr" onclick="toggleAcc('acc5')">
+    <div class="ah-l"><div class="anum">5</div><span class="atitle">พื้นหลัง</span><span class="asub">10 ฉาก</span></div>
+    <span class="arr">▼</span>
+  </div>
+  <div class="acc-body">
+    <div class="togrow"><button class="tog" id="swbg" onclick="togBg()"></button><span class="toglbl" id="swbg-l">ให้ AI สร้างพื้นหลัง</span></div>
+    <div id="bg-chips"><div class="chips" id="bgc">
+      <div class="chip on" onclick="cbg(this,'urban')">🌆 เมือง</div>
+      <div class="chip" onclick="cbg(this,'office')">🏢 ออฟฟิศ</div>
+      <div class="chip" onclick="cbg(this,'store')">🛍️ ร้านค้า</div>
+      <div class="chip" onclick="cbg(this,'studio')">🎬 Studio</div>
+      <div class="chip" onclick="cbg(this,'conf')">📊 ห้องประชุม</div>
+      <div class="chip" onclick="cbg(this,'nature')">🌿 ธรรมชาติ</div>
+      <div class="chip" onclick="cbg(this,'abstract')">🎨 Abstract</div>
+      <div class="chip" onclick="cbg(this,'factory')">🏭 โรงงาน</div>
+      <div class="chip" onclick="cbg(this,'cafe')">☕ คาเฟ่</div>
+      <div class="chip" onclick="cbg(this,'stage')">🎤 เวที</div>
+    </div></div>
+    <div id="bg-up" style="display:none"><div class="ubox"><img id="pb2" class="uprev"><div>🖼️ Upload พื้นหลัง</div><input type="file" accept="image/*" onchange="pv(event,'pb2')"></div></div>
+    <div class="sz-warn" id="sz-warn">⚠️ Safe Zone: ขอบบน/ล่าง 15% จะถูก UI ทับ</div>
+  </div>
+</div>
+
+<!-- SEC 6: TONE -->
+<div class="acc" id="acc6">
+  <div class="acc-hdr" onclick="toggleAcc('acc6')">
+    <div class="ah-l"><div class="anum">6</div><span class="atitle">โทนสี</span><span class="asub">100 แบบ / 8 หมวด</span></div>
+    <span class="arr">▼</span>
+  </div>
+  <div class="acc-body">
+    <div class="ttabs" id="ttabs">
+      <button class="ttab on" onclick="setTC(this,'dark')">🖤 Dark</button>
+      <button class="ttab" onclick="setTC(this,'vibrant')">🌈 Vibrant</button>
+      <button class="ttab" onclick="setTC(this,'pastel')">🌸 Pastel</button>
+      <button class="ttab" onclick="setTC(this,'corp')">🏆 Corp</button>
+      <button class="ttab" onclick="setTC(this,'warm')">🌅 Warm</button>
+      <button class="ttab" onclick="setTC(this,'natural')">🌿 Natural</button>
+      <button class="ttab" onclick="setTC(this,'trendy')">🎨 Trendy</button>
+      <button class="ttab" onclick="setTC(this,'seasonal')">⭐ Seasonal</button>
+    </div>
+    <div class="tgrid" id="tgrid"></div>
+    <div class="tone-warn" id="tone-warn">⚠️ โทนสีและแสงที่เลือกอาจไม่เข้ากัน — ลองเปลี่ยนแสงดูนะคะ</div>
+  </div>
+</div>
+
+<!-- SEC 7: LIGHT -->
+<div class="acc" id="acc7">
+  <div class="acc-hdr" onclick="toggleAcc('acc7')">
+    <div class="ah-l"><div class="anum">7</div><span class="atitle">แสง & บรรยากาศ</span><span class="asub">10 แบบ</span></div>
+    <span class="arr">▼</span>
+  </div>
+  <div class="acc-body">
+    <div class="lgrid2" id="lgrid2">
+      <div class="lcard on" onclick="setLt(this,'natural')"><span class="ico">☀️</span><div><div class="ln">แสงกลางวัน</div><div class="ld">สว่างสดใส กลางแจ้ง</div></div></div>
+      <div class="lcard" onclick="setLt(this,'golden')"><span class="ico">🌅</span><div><div class="ln">แสงโกลเด้น</div><div class="ld">ทองอุ่น หรูหรา</div></div></div>
+      <div class="lcard" onclick="setLt(this,'spot')"><span class="ico">🎯</span><div><div class="ln">แสงสปอตไลท์</div><div class="ld">ส่องตรงคน พื้นหลังมืด</div></div></div>
+      <div class="lcard" onclick="setLt(this,'side')"><span class="ico">🎬</span><div><div class="ln">แสงด้านข้าง</div><div class="ld">มีมิติ เหมือนหนัง</div></div></div>
+      <div class="lcard" onclick="setLt(this,'backlit')"><span class="ico">💡</span><div><div class="ln">แสงจากด้านหลัง</div><div class="ld">ทรงพลัง แสงลุกโชน</div></div></div>
+      <div class="lcard" onclick="setLt(this,'neon')"><span class="ico">🌙</span><div><div class="ln">แสงนีออน</div><div class="ld">สีสัน ป้ายไฟ เท่</div></div></div>
+      <div class="lcard" onclick="setLt(this,'soft')"><span class="ico">🕯️</span><div><div class="ln">แสงนุ่มนวล</div><div class="ld">กระจายทั่ว อ่อนโยน</div></div></div>
+      <div class="lcard" onclick="setLt(this,'drama')"><span class="ico">⚡</span><div><div class="ln">แสงดราม่าสูง</div><div class="ld">คมชัด เงาแข็ง ดุดัน</div></div></div>
+      <div class="lcard" onclick="setLt(this,'dreamy')"><span class="ico">🌫️</span><div><div class="ln">แสง Dreamy</div><div class="ld">นุ่มเบลอ ฝัน</div></div></div>
+      <div class="lcard" onclick="setLt(this,'studio')"><span class="ico">🔵</span><div><div class="ln">แสงสตูดิโอ</div><div class="ld">สะอาด โปร</div></div></div>
+    </div>
+  </div>
+</div>
+
+</div><!-- /left -->
+
+<!-- RIGHT COL -->
+<div class="rcol">
+  <!-- PREVIEW -->
+  <div class="rbox">
+    <div class="rbox-hdr">
+      <span class="rbox-lbl">Preview Layout</span>
+      <button class="fsbtn" onclick="openFS('mock')">⛶ ขยาย</button>
+    </div>
+    <div style="padding:10px">
+      <div class="mock" id="mock" style="aspect-ratio:4/5">
+        <div class="mock-bg">Background Zone</div>
+        <div class="mock-inner" id="mc"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SUMMARY -->
+  <div class="rbox">
+    <div class="rbox-hdr"><span class="rbox-lbl">สรุปภาษาไทย</span></div>
+    <div class="sum-box" id="sum-txt">เลือกตัวเลือกด้านซ้าย...</div>
+  </div>
+
+  <!-- PROMPT -->
+  <div class="rbox">
+    <div class="rbox-hdr">
+      <span class="rbox-lbl">GPT-4o Prompt</span>
+      <div class="rbox-acts">
+        <button class="fsbtn" onclick="openFS('prompt')">⛶ ขยาย</button>
+        <button class="cbtn" onclick="co('ob','Copy')">Copy</button>
+      </div>
+    </div>
+    <div class="out-box" id="ob">กรอกข้อมูลด้านซ้าย...</div>
+    <div style="display:flex;justify-content:space-between;align-items:center;padding:6px 11px;border-top:1px solid var(--bd)">
+      <span class="rbox-lbl">Negative Prompt</span>
+      <button class="cbtn" onclick="co('nb','Copy')">Copy</button>
+    </div>
+    <div class="neg-box" id="nb"></div>
+  </div>
+</div>
+</div>
+</div>
+
+<!-- FULLSCREEN OVERLAY -->
+<div class="fs-overlay" id="fs-overlay">
+  <button class="fs-close" onclick="closeFS()">✕ ปิด</button>
+  <div class="fs-content" id="fs-content"></div>
+  <button class="fs-copy" onclick="copyFS()">Copy ทั้งหมด</button>
+</div>
+
+<script>
+// ── STATE ──────────────────────────────────────────────
+var TC='#CC0000',TCG='#CC0000',HC='#ffffff',HCG='#ffffff',QC='#CC0000',QCG='#CC0000';
+var BBC='#FFD600',BTC='#000000';
+var BG='urban',LAYOUT='T-P-H',LIGHT='natural',TONE='dark-red-glow';
+var UPM=false,BGM=false,PF='fb',CURCAT='dark',CAT='sales';
+var SZL=['เล็กมาก','เล็ก','กลาง','ใหญ่','ใหญ่มาก'];
+var FS_MODE='prompt';
+
+// ── SUGGEST DATA ───────────────────────────────────────
+var SUGG={
+  sales:{
+    title:['SALES MASTER','CLOSE THE DEAL','TOP PERFORMER','WIN EVERY PITCH','SALES GENIUS','OBJECTION KILLER','DEAL CLOSED','SALES DNA','REVENUE MACHINE','PITCH PERFECT'],
+    hl:['ปิดการขายได้ "ทุกสถานการณ์"','เทคนิคที่ "นักขายโปรใช้จริง"','ลูกค้าบอก "ไม่" แล้วทำไง?','วิธีปิดดีล "ภายใน 5 นาที"','ขายได้ทุกวัน "ไม่ใช่โชค"','สคริปต์ขายที่ "ใช้ได้จริง"','ทำไม "นักขายเก่ง" ไม่กลัวถูกปฏิเสธ','เพิ่มยอดขาย "ได้ทันที" ด้วยเทคนิคนี้','ความลับที่ "ท็อปเซลล์" ไม่บอกใคร','จาก 0 ถึง "ปิดได้ทุกดีล"']
+  },
+  insurance:{
+    title:['PROTECT YOUR LIFE','SECURE YOUR FUTURE','LIFE INSURANCE 101','FINANCIAL FREEDOM','COVERAGE MATTERS','PLAN YOUR FUTURE','RISK ZERO','WEALTH PROTECTION','SMART COVERAGE','LEGACY BUILDER'],
+    hl:['ความคุ้มครองที่คุณ "เลือกได้"','วางแผนการเงิน "ก่อนสาย"','ประกันที่ "คุ้มค่าจริง"','ปกป้องครอบครัว "ด้วยแผนนี้"','อนาคตที่ "มั่นคง" เริ่มที่นี่','ทำไมต้อง "มีประกัน" ตอนนี้?','ความเสี่ยงที่คุณ "มองข้าม"','เงินออม vs ประกัน "อะไรดีกว่า?"','ปกป้อง "ทุกสิ่งที่รัก" ด้วยแผนเดียว','เริ่มต้น "ชีวิตมั่นคง" ได้วันนี้']
+  },
+  counseling:{
+    title:['MIND MATTERS','HEAL YOUR SOUL','MENTAL HEALTH','INNER PEACE','PSYCHOLOGY TODAY','MIND RESET','EMOTIONAL BALANCE','SELF HEALING','MIND POWER','FEEL BETTER'],
+    hl:['จิตใจที่ดี "เริ่มต้นที่นี่"','ความเครียดที่คุณ "แบกอยู่คนเดียว"','บำบัดใจ "ด้วยวิธีนี้"','ทำไม "ความรู้สึก" สำคัญกว่าที่คิด','หยุด "ตัดสินตัวเอง" ได้แล้ว','ใจสงบ "ชีวิตดี"','รักตัวเอง "ให้เป็น"','ปล่อยวาง "สิ่งที่ทำร้ายใจ"','เยียวยาใจ "ก่อนจะสาย"','จิตวิทยาที่ "เปลี่ยนชีวิต"']
+  },
+  ai:{
+    title:['AI FOR WORK','FUTURE IS NOW','AI REVOLUTION','TECH MASTERY','DIGITAL SHIFT','AI POWERED','PROMPT MASTER','AUTOMATION NOW','AI TOOLS 2025','BUILD WITH AI'],
+    hl:['AI เปลี่ยนโลก "คุณพร้อมหรือยัง?"','เครื่องมือ AI ที่ "คนทำงานต้องรู้"','ทำงานเร็วขึ้น "10 เท่า" ด้วย AI','อนาคตของ "คนที่ใช้ AI เป็น"','AI ทำแทนได้ "แต่คุณต้องสั่งเป็น"','Prompt ที่ "ได้ผลทุกครั้ง"','เทรนด์ AI "ที่คนทำงานต้องรู้วันนี้"','ใช้ AI "ให้เป็น" ชีวิตเปลี่ยน','จาก AI Beginner สู่ "AI Power User"','อาชีพไหน "รอดจาก AI" บ้าง?']
+  },
+  biz:{
+    title:['LEADERSHIP NOW','BUSINESS GROWTH','CEO MINDSET','SCALE UP','STRATEGY WINS','BUSINESS MASTERY','LEAD THE CHANGE','GROW OR DIE','PROFIT MACHINE','THINK BIG'],
+    hl:['ผู้นำยุคใหม่ "ต้องคิดอย่างไร?"','ธุรกิจโต "เพราะทีมแกร่ง"','กลยุทธ์ที่ "CEO ใช้จริง"','จาก SME สู่ "ธุรกิจระดับโลก"','ตัดสินใจ "ให้เป็น" แบบผู้นำ','ทีมที่ดี "สร้างยังไง?"','ความล้มเหลวที่ "ทำให้ธุรกิจโต"','วิธีสเกล "โดยไม่ต้องทำทุกอย่างเอง"','กำไรเพิ่ม "ด้วยวิธีนี้"','องค์กรแห่งอนาคต "เริ่มที่คุณ"']
+  },
+  self:{
+    title:['GROW DAILY','LEVEL UP','MINDSET SHIFT','BECOME BETTER','DAILY WINS','GROWTH MINDSET','UPGRADE YOURSELF','1% BETTER','SELF MASTERY','UNLOCK YOU'],
+    hl:['พัฒนาตัวเอง "ทีละก้าว"','นิสัยที่ "เปลี่ยนชีวิต" ใน 21 วัน','ทำไม "คนสำเร็จ" ตื่นเช้า','Mindset ที่ "คนรวยมี" แต่คนจนไม่รู้','หยุด "แค่รู้" แล้วลงมือทำ','Version ที่ดีกว่า "ของตัวเอง"','เปลี่ยน "ความกลัว" เป็นพลัง','ทำสิ่งนี้ "ทุกเช้า" ชีวิตเปลี่ยน','อย่าเปรียบ "ตัวเองกับคนอื่น"','เส้นทางสู่ "เวอร์ชั่นที่ดีที่สุด"']
+  },
+  news:{
+    title:['BREAKING NOW','TREND ALERT','MUST KNOW','NEWS TODAY','WHAT HAPPENED','BIG NEWS','WORLD UPDATE','INSIGHT NOW','FACT CHECK','STORY BEHIND'],
+    hl:['เทรนด์ที่คุณ "ต้องรู้วันนี้"','เรื่องนี้ "กระทบคุณโดยตรง"','ความจริงที่ "สื่อไม่บอก"','เกิดอะไรขึ้น "กับโลกใบนี้?"','ข่าวนี้ "เปลี่ยนทุกอย่าง"','วิเคราะห์ "ให้ลึกกว่าที่เห็น"','ทำไม "เรื่องนี้" ถึงสำคัญ?','อัปเดต "ที่คุณพลาดไม่ได้"','มุมมอง "ที่คนส่วนใหญ่มองข้าม"','เบื้องหลัง "ที่ไม่มีใครพูดถึง"']
+  },
+  mkt:{
+    title:['BRAND POWER','GO VIRAL','CONTENT WINS','SOCIAL MEDIA PRO','PERSONAL BRAND','DIGITAL MARKETING','AUDIENCE GROWTH','CONTENT STRATEGY','BRAND STORY','STAND OUT'],
+    hl:['สร้าง Personal Brand "ให้คนจำ"','Content ที่ "ไวรัลได้ทุกครั้ง"','ทำไม "แบรนด์นี้" ถึงดังเร็ว?','Social Media "ที่ขายได้จริง"','เขียน Caption "ให้คนหยุดดู"','สร้างแบรนด์ "จากศูนย์" ใน 90 วัน','Algorithm "ที่คุณต้องรู้"','Content ปี 2025 "ต้องเป็นแบบนี้"','ทำ "ให้คนติดตาม" โดยไม่ซื้อแอด','แบรนด์ที่ "คนรัก" สร้างยังไง?']
+  },
+  moti:{
+    title:['NEVER GIVE UP','RISE AGAIN','YOU CAN DO IT','KEEP GOING','BELIEVE IN YOU','STRONG MIND','FIGHT BACK','UNSTOPPABLE','WARRIOR MINDSET','BORN TO WIN'],
+    hl:['เพราะ "ความพยายาม" ไม่เคยทำร้ายใคร','ล้มแล้ว "ลุกได้เสมอ"','คนที่สำเร็จ "ไม่ได้เก่งกว่า" แค่ไม่ยอมแพ้','ความฝันที่ "คุ้มค่าต่อการสู้"','วันที่ยากที่สุด "คือวันที่ใกล้ถึงเป้า"','อย่าให้ "ความกลัว" ตัดสินชีวิตคุณ','เริ่มใหม่ "ได้เสมอ" ไม่มีสายเกินไป','แรงบันดาลใจ "ที่หาไม่ได้จากคนอื่น"','ชีวิตที่ดี "เริ่มจากความกล้า"','คุณ "แข็งแกร่งกว่า" ที่คิด']
+  },
+  edu:{
+    title:['LEARN TODAY','KNOWLEDGE POWER','STUDY SMART','HOW TO MASTER','SKILL UP','LEARN FAST','EXPERT IN 30 DAYS','TEACH YOURSELF','BRAIN BOOST','KNOW MORE'],
+    hl:['วิธีทำ "ที่ใครก็ทำได้"','เรียนรู้ "ให้เร็วกว่าคนอื่น" ด้วยวิธีนี้','ทักษะที่ "ตลาดต้องการ" ปี 2025','สอนตัวเอง "ได้ทุกอย่าง" ด้วย 3 ขั้นตอน','เรียนออนไลน์ "ให้ได้ผลจริง"','ความรู้ที่ "โรงเรียนไม่สอน"','จาก 0 สู่ "Expert" ใน 30 วัน','วิธีจำ "ได้นาน" โดยไม่ต้องท่อง','อัปสกิล "ให้ทันโลก" ในปี 2025','เรียนรู้ "สิ่งนี้" ก่อนใคร']
+  }
 };
 
-var TPX=[8,10,13,17,22],HPX=[7,9,11,14,18];
+// ── AUTO PRESET ────────────────────────────────────────
+var AUTO={
+  sales:{tone:'dark-red-glow',light:'spot',bg:'office',expr:'confident',out:'blazer',cam:'medium',ang:'eye',layout:'TB-P-H'},
+  insurance:{tone:'corp-navy',light:'soft',bg:'office',expr:'smile',out:'formal',cam:'medium',ang:'eye',layout:'T-P-H'},
+  counseling:{tone:'dark-purple',light:'dreamy',bg:'nature',expr:'calm',out:'smart',cam:'bust',ang:'eye',layout:'T-P-H'},
+  ai:{tone:'dark-cool',light:'neon',bg:'abstract',expr:'confident',out:'smart',cam:'medium',ang:'low',layout:'TB-P-H'},
+  biz:{tone:'corp-char',light:'side',bg:'conf',expr:'serious',out:'formal',cam:'medium',ang:'eye',layout:'T-P-H'},
+  self:{tone:'warm-golden',light:'golden',bg:'nature',expr:'smile',out:'casual',cam:'medium',ang:'eye',layout:'T-P-H'},
+  news:{tone:'dark-cinematic',light:'drama',bg:'urban',expr:'serious',out:'smart',cam:'medium',ang:'eye',layout:'TB-P-H'},
+  mkt:{tone:'vib-orange',light:'spot',bg:'studio',expr:'pointing',out:'smart',cam:'medium',ang:'eye',layout:'T-P-H'},
+  moti:{tone:'warm-sunset',light:'backlit',bg:'nature',expr:'empowered',out:'casual',cam:'full',ang:'low',layout:'T-P-H'},
+  edu:{tone:'corp-teal',light:'natural',bg:'office',expr:'smile',out:'smart',cam:'medium',ang:'eye',layout:'T-P-H'}
+};
 
-function pc(gid,el,t){
-  document.querySelectorAll('#'+gid+' .swatch').forEach(s=>s.classList.remove('on'));
-  el.classList.add('on');
-  var c=el.dataset.c;
-  if(t==='t')TC=c; else if(t==='h')HC=c; else QC=c;
+// ── TONES ──────────────────────────────────────────────
+var TONES={
+  dark:[{id:'dark-red-glow',nm:'Dark Red Glow',c:'#CC0000',d:'ดำ+แดง'},{id:'dark-cinematic',nm:'Dark Cinematic',c:'#1a1a2e',d:'ดำลึก'},{id:'dark-gold',nm:'Dark Gold',c:'#b8860b',d:'ดำ+ทอง'},{id:'dark-cool',nm:'Dark Cool Blue',c:'#0a4080',d:'ดำ+น้ำเงิน'},{id:'dark-warm',nm:'Dark Amber',c:'#cc6600',d:'ดำ+อำพัน'},{id:'dark-teal',nm:'Dark Teal',c:'#007777',d:'ดำ+เขียวฟ้า'},{id:'dark-purple',nm:'Dark Purple',c:'#6600cc',d:'ดำ+ม่วง'},{id:'dark-olive',nm:'Dark Olive',c:'#556b2f',d:'ดำ+เขียว'},{id:'bw-contrast',nm:'B&W Contrast',c:'#888',d:'ขาวดำ'},{id:'moody-grey',nm:'Moody Grey',c:'#666',d:'เทาเข้ม'},{id:'dark-emerald',nm:'Dark Emerald',c:'#00aa55',d:'ดำ+มรกต'},{id:'dark-crimson',nm:'Dark Crimson',c:'#990033',d:'ดำ+แดงเข้ม'},{id:'dark-navy',nm:'Dark Navy',c:'#003399',d:'ดำ+กรม'},{id:'carbon',nm:'Carbon Black',c:'#333',d:'ดำสนิท'},{id:'midnight',nm:'Midnight',c:'#1a1a44',d:'กลางคืน'}],
+  vibrant:[{id:'vib-red',nm:'Electric Red',c:'#FF0000',d:'แดงจัด'},{id:'vib-blue',nm:'Electric Blue',c:'#0066FF',d:'น้ำเงินสด'},{id:'vib-green',nm:'Neon Green',c:'#00FF41',d:'เขียวนีออน'},{id:'vib-pink',nm:'Hot Pink',c:'#FF0080',d:'ชมพูร้อน'},{id:'vib-orange',nm:'Vivid Orange',c:'#FF5500',d:'ส้มสด'},{id:'vib-purple',nm:'Vivid Purple',c:'#8800FF',d:'ม่วงสด'},{id:'vib-yellow',nm:'Vivid Yellow',c:'#FFD600',d:'เหลืองสด'},{id:'vib-cyan',nm:'Cyber Cyan',c:'#00FFFF',d:'ฟ้าไซเบอร์'},{id:'vib-gold',nm:'Bold Gold',c:'#FFB800',d:'ทองจัด'},{id:'vib-coral',nm:'Vivid Coral',c:'#FF4433',d:'ปะการังสด'},{id:'vib-lime',nm:'Lime Punch',c:'#AAFF00',d:'เขียวมะนาว'},{id:'vib-magenta',nm:'Magenta',c:'#FF00FF',d:'ม่วงแดง'},{id:'vib-teal',nm:'Vivid Teal',c:'#00CCAA',d:'เขียวฟ้าสด'},{id:'vib-indigo',nm:'Bold Indigo',c:'#3300FF',d:'ครามเข้ม'},{id:'vib-fire',nm:'Fire',c:'#FF6600',d:'สีไฟ'}],
+  pastel:[{id:'pas-pink',nm:'Soft Pink',c:'#FFB3C6',d:'ชมพูอ่อน'},{id:'pas-blue',nm:'Baby Blue',c:'#AED9E0',d:'ฟ้าอ่อน'},{id:'pas-mint',nm:'Mint',c:'#B8F0D8',d:'มิ้นต์'},{id:'pas-lavender',nm:'Lavender',c:'#D4B8F0',d:'ลาเวนเดอร์'},{id:'pas-peach',nm:'Peach',c:'#FFCBA4',d:'พีช'},{id:'pas-yellow',nm:'Soft Yellow',c:'#FFF0A0',d:'เหลืองอ่อน'},{id:'pas-lilac',nm:'Lilac',c:'#E8CCFF',d:'ม่วงอ่อน'},{id:'pas-sage',nm:'Sage Green',c:'#B8D4B0',d:'เซจ'},{id:'pas-cream',nm:'Cream',c:'#FFF5DC',d:'ครีม'},{id:'pas-rose',nm:'Rose Quartz',c:'#F0C0C0',d:'กุหลาบ'},{id:'pas-sky',nm:'Sky Mist',c:'#C8E8FF',d:'ฟ้าหมอก'},{id:'pas-cotton',nm:'Cotton Candy',c:'#FFD6F5',d:'สายไหม'}],
+  corp:[{id:'corp-navy',nm:'Navy',c:'#003399',d:'กรมท่า'},{id:'corp-char',nm:'Charcoal',c:'#555f6e',d:'เทาเข้ม'},{id:'corp-teal',nm:'Deep Teal',c:'#006666',d:'เขียวฟ้าเข้ม'},{id:'corp-wine',nm:'Wine Red',c:'#aa3344',d:'แดงเข้ม'},{id:'corp-forest',nm:'Forest',c:'#336622',d:'เขียวป่า'},{id:'corp-slate',nm:'Slate Blue',c:'#4466aa',d:'น้ำเงินเทา'},{id:'corp-bronze',nm:'Bronze',c:'#aa8833',d:'บรอนซ์'},{id:'corp-indigo',nm:'Indigo',c:'#334488',d:'คราม'},{id:'corp-steel',nm:'Steel',c:'#607080',d:'เหล็กกล้า'},{id:'corp-hunter',nm:'Hunter',c:'#336633',d:'นายพราน'},{id:'corp-plum',nm:'Plum',c:'#773388',d:'มะเขือ'},{id:'corp-cobalt',nm:'Cobalt',c:'#0055bb',d:'โคบอลต์'}],
+  warm:[{id:'warm-sunset',nm:'Sunset',c:'#FF6B35',d:'พระอาทิตย์ตก'},{id:'warm-golden',nm:'Golden Hour',c:'#FFC107',d:'ชั่วโมงทอง'},{id:'warm-amber',nm:'Amber',c:'#FF8C00',d:'อำพัน'},{id:'warm-terra',nm:'Terracotta',c:'#cc5533',d:'ดินเผา'},{id:'warm-rust',nm:'Rust',c:'#cc4411',d:'สนิม'},{id:'warm-sand',nm:'Sandy',c:'#ccaa66',d:'ทราย'},{id:'warm-brick',nm:'Brick',c:'#aa2233',d:'อิฐแดง'},{id:'warm-copper',nm:'Copper',c:'#cc8833',d:'ทองแดง'},{id:'warm-spice',nm:'Spice',c:'#cc6633',d:'เครื่องเทศ'},{id:'warm-papaya',nm:'Papaya',c:'#FF9140',d:'มะละกอ'},{id:'warm-honey',nm:'Honey',c:'#FFB800',d:'น้ำผึ้ง'},{id:'warm-cin',nm:'Cinnamon',c:'#bb5522',d:'อบเชย'}],
+  natural:[{id:'nat-forest',nm:'Forest',c:'#228B22',d:'เขียวป่า'},{id:'nat-earth',nm:'Earth',c:'#886622',d:'น้ำตาลดิน'},{id:'nat-sand',nm:'Sand',c:'#ccaa66',d:'ทราย'},{id:'nat-moss',nm:'Moss',c:'#779944',d:'มอส'},{id:'nat-stone',nm:'Stone',c:'#888877',d:'หิน'},{id:'nat-ocean',nm:'Ocean',c:'#006699',d:'ทะเล'},{id:'nat-bamboo',nm:'Bamboo',c:'#99bb44',d:'ไผ่'},{id:'nat-clay',nm:'Clay',c:'#bb6644',d:'ดินเหนียว'},{id:'nat-sky',nm:'Sky',c:'#66aadd',d:'ท้องฟ้า'},{id:'nat-autumn',nm:'Autumn',c:'#cc8833',d:'ใบไม้ร่วง'},{id:'nat-dew',nm:'Dew',c:'#88dd88',d:'น้ำค้าง'},{id:'nat-lava',nm:'Volcanic',c:'#aa2200',d:'ภูเขาไฟ'}],
+  trendy:[{id:'tr-y2k',nm:'Y2K',c:'#FF79C6',d:'Y2K'},{id:'tr-vapor',nm:'Vaporwave',c:'#cc44ee',d:'Vaporwave'},{id:'tr-retro70',nm:'Retro 70s',c:'#cc7722',d:'ย้อนยุค'},{id:'tr-indie',nm:'Indie Film',c:'#997755',d:'ฟิล์มอินดี้'},{id:'tr-cyber',nm:'Cyberpunk',c:'#FF003C',d:'Cyberpunk'},{id:'tr-lofi',nm:'Lo-Fi',c:'#7755cc',d:'Lo-Fi'},{id:'tr-dark-acad',nm:'Dark Academia',c:'#775533',d:'Dark Academia'},{id:'tr-cottage',nm:'Cottagecore',c:'#88aa55',d:'Cottagecore'},{id:'tr-tech',nm:'Tech Minimal',c:'#4488cc',d:'เทคมินิมอล'},{id:'tr-neon-dark',nm:'Neon Dark',c:'#aa00ff',d:'นีออนบนดำ'},{id:'tr-noir',nm:'Film Noir',c:'#777',d:'Film Noir'},{id:'tr-grunge',nm:'Grunge',c:'#886644',d:'Grunge'}],
+  seasonal:[{id:'sea-xmas',nm:'Christmas',c:'#228833',d:'คริสต์มาส'},{id:'sea-ny',nm:'New Year',c:'#FFD700',d:'ปีใหม่'},{id:'sea-songkran',nm:'Songkran',c:'#00BFFF',d:'สงกรานต์'},{id:'sea-loy',nm:'Loy Krathong',c:'#FF8C00',d:'ลอยกระทง'},{id:'sea-val',nm:"Valentine's",c:'#FF1493',d:'วาเลนไทน์'},{id:'sea-halloween',nm:'Halloween',c:'#FF6600',d:'ฮาโลวีน'},{id:'sea-spring',nm:'Spring',c:'#88cc44',d:'ใบไม้ผลิ'},{id:'sea-summer',nm:'Summer',c:'#FFCC00',d:'ฤดูร้อน'},{id:'sea-winter',nm:'Winter',c:'#88ccff',d:'ฤดูหนาว'},{id:'sea-harvest',nm:'Harvest',c:'#cc7722',d:'เก็บเกี่ยว'}]
+};
+
+// TONE MATCH WARNING
+var TONE_WARN_PAIRS={
+  pastel:['spot','drama','neon','side','backlit'],
+  vibrant:['dreamy','soft'],
+  dark:['natural','golden'],
+  natural:['neon','drama'],
+  trendy:[],
+  corp:['neon','dreamy'],
+  warm:['neon','studio'],
+  seasonal:[]
+};
+
+// ── LOOKUP TABLES ──────────────────────────────────────
+var LIGHT_EN={natural:'Natural bright daylight, fresh high-key outdoor illumination, clean white light, f/8 equivalent',golden:'Golden hour warm amber glow, late afternoon low-angle sun, glowing skin tones, subtle lens flare',spot:'Dramatic overhead spotlight at 45°, single hard key light on subject, deep dark surroundings, theatrical presence',side:'Cinematic 90° side lighting from camera-left, contrasty shadows opposite side, Rembrandt film quality',backlit:'Bright backlight behind subject, strong rim highlight outlining figure, subject slightly underexposed vs background',neon:'Night scene, multiple colored neon signs reflecting on subject and surfaces, cyberpunk city atmosphere',soft:'Large softbox diffused light, even wraparound illumination, no harsh shadows, flattering editorial quality',drama:'Extreme high-contrast single hard key light, deep crushed blacks, bright highlights, very cinematic intense feel',dreamy:'Soft bloom glow, ethereal diffusion filter, gentle light leaks, milky romantic atmospheric haze',studio:'Clean 3-point professional studio lighting, key fill and rim, even controlled illumination, commercial standard'};
+var EXPR_EN={confident:'Confident direct eye contact, slight authoritative expression, composed posture, commanding presence',power:'High energy empowered, dynamic body language, arms open or raised, motivated driven look',contrast:'One subject: serious focused expression. Other: warm natural smile. Strong emotional contrast.',serious:'Serious focused authoritative, determined expression, slightly furrowed brow, executive presence',smile:'Warm genuine natural smile, friendly approachable, soft eyes crinkling, relatable energy',surprise:'Genuinely surprised, eyes wide open, eyebrows raised high, mouth slightly open, shocked and amazed',thinking:'Thoughtful contemplative, one hand near chin, slight upward gaze, intellectual curious expression',pointing:'Pointing finger directly at camera or key text area, energetic engaging, breaking fourth wall',laughing:'Genuine joyful laughter, head slightly tilted back, authentic smile, highly relatable human moment',empowered:'Heroic empowered pose, strong confident stance, chest out, arms crossed or fists raised, superhero energy',calm:'Calm serene peaceful, soft gaze, completely relaxed muscles, composed centered inner strength',curious:'Curious intrigued, head tilted slightly, eyebrows raised with genuine interest, leaning slightly forward'};
+var OUT_EN={blazer:'Well-fitted business casual blazer over smart shirt, professional polished modern executive look',smart:'Smart casual clean collared shirt or stylish blouse, approachable yet professional',formal:'Crisp formal business suit, well-tailored, executive authoritative power dressing',casual:'Stylish casual street outfit, modern trendy relatable, not overdressed',thai:'Elegant traditional Thai costume with gold silk accents, cultural prestige and sophistication',sport:'Athletic performance sportswear, dynamic energetic healthy lifestyle',doctor:'White doctor coat or expert professional uniform, authority and subject matter expertise',hoodie:'Premium quality hoodie or urban streetwear, modern youth appeal creative energy',uniform:'Professional staff or corporate branded wear, trust reliability institutional authority',evening:'Elegant evening gown or cocktail attire, sophisticated glamorous high-end event',denim:'Stylish denim jacket and jeans, casual confidence creative and approachable',tshirt:'Clean graphic tee or plain quality t-shirt, everyday relatable energy authentic and unpretentious'};
+var CAM_EN={medium:'Medium shot framed from waist up, subject fills 60-70% of frame height, standard composition',close:'Close-up shot face and shoulders only, intimate impactful highly personal connection',full:'Full body shot head to toe, subject fills 70% of frame height',wide:'Wide establishing shot, subject in environmental context, 35-45% of frame',bust:'Bust shot framed from chest up, face and upper torso prominent'};
+var ANG_EN={eye:'Eye level straight horizontal, most natural relatable perspective, equals relationship with viewer',low:'Low angle camera below eye level looking up, subject appears powerful dominant larger than life',high:'High angle camera above looking down, overview feeling subject in context',dutch:'Dutch angle tilted 15-20 degrees, dynamic tension and cinematic energy',front:'Dead-on frontal perfectly symmetrical straight-on, direct impactful powerful'};
+var CNT_EN={'solo-f':'A single Asian woman','solo-m':'A single Asian man','solo-n':'A single Asian person','team-f2':'Two Asian women side by side','team-m2':'Two Asian men side by side','team-mix2':'One Asian man and one Asian woman side by side','team-f3':'Three Asian women in dynamic group arrangement','team-m3':'Three Asian men in dynamic group arrangement','team-mix3':'Mixed group of three Asian people','team-big':'Large team of four or more Asian people in group photo composition','none':'No people'};
+var CNT_TH={'solo-f':'Solo หญิง','solo-m':'Solo ชาย','solo-n':'Solo','team-f2':'ทีมหญิง 2','team-m2':'ทีมชาย 2','team-mix2':'ทีมผสม 2','team-f3':'ทีมหญิง 3','team-m3':'ทีมชาย 3','team-mix3':'ทีมผสม 3','team-big':'ทีมใหญ่ 4+','none':'ไม่มีคน'};
+var EXPR_TH={confident:'มั่นใจ',power:'พลัง',contrast:'จริงจัง+ยิ้ม',serious:'จริงจัง',smile:'ยิ้ม',surprise:'ตกใจ',thinking:'คิด',pointing:'ชี้กล้อง',laughing:'หัวเราะ',empowered:'ฮีโร่',calm:'สงบ',curious:'อยากรู้'};
+var OUT_TH={blazer:'Blazer',smart:'Smart Casual',formal:'Formal Suit',casual:'Casual',thai:'ชุดไทย',sport:'Sport',doctor:'Doctor',hoodie:'Hoodie',uniform:'Uniform',evening:'Evening Gown',denim:'Denim',tshirt:'T-Shirt'};
+var CAM_TH={medium:'ครึ่งตัว',close:'Close-up',full:'เต็มตัว',wide:'Wide',bust:'อก'};
+var ANG_TH={eye:'ระดับตา',low:'มุมต่ำ',high:'มุมสูง',dutch:'เอียง',front:'ตรงหน้า'};
+var BGD={urban:'blurred urban street with city lights and modern buildings',office:'blurred modern open-plan office with glass walls',store:'blurred retail store or marketplace environment',studio:'dark controlled minimal studio with seamless background',conf:'blurred modern conference room or corporate boardroom',nature:'blurred lush natural outdoor environment with greenery and sky',abstract:'abstract dark textured background with subtle geometric depth',factory:'blurred industrial warehouse or factory floor',cafe:'blurred warm cozy cafe interior with ambient lighting',stage:'blurred performance stage with dramatic spotlight beams'};
+var PF_EN={fb:'Facebook Post — 4:5 vertical (1080x1350px)',reel:'TikTok / Instagram Reel — 9:16 vertical (1080x1920px)',ig:'Instagram Post — 1:1 square (1080x1080px)',igs:'Instagram Story — 9:16 vertical (1080x1920px)',yt:'YouTube Thumbnail — 16:9 landscape (1280x720px)',banner:'Horizontal Banner — 3:1 wide format'};
+var LAYOUT_EN={'T-P-H':'Title centered top (5-28% height). Subject centered middle (30-65%). Headline centered bottom (70-95%).','TB-P-H':'Title top 5-20%. Badge below title 21-30%. Subject middle 32-65%. Headline bottom 70-95%.','TBH-P':'All text (Title, Badge, Headline) stacked upper 38%. Subject fills lower 45-95%.','P-TBH':'Subject upper 40-45%. All typography stacked lower 50-95%.','T-P-BH':'Title top 5-25%. Subject middle. Badge then Headline stacked bottom 68-95%.','TB-P':'Title and Badge top 5-35%. Subject fills lower 38-95%. No Headline.','P-H':'Subject upper 40-50%. Headline only at bottom 60-95%. No Title.','T-P':'Title top 5-28%. Subject lower. No Headline.','SL-PR':'Typography on left 45% vertically centered. Subject on right 55% facing left.','PL-SR':'Subject on left 55%. Typography on right 45% vertically centered.','SL-PR-B':'Typography left 45%, subject right 55%. Badge centered at very bottom.','PL-SR-B':'Subject left 55%, typography right 45%. Badge at very bottom center.','OV-T':'Subject fills frame. Title and Badge float overlaid at top. Headline below subject.','OV-B':'Subject fills frame. Title at top. Headline floats overlaid at bottom.','OV-TB':'Subject fills frame. Title+Badge float overlaid top 5-28%. Headline floats overlaid bottom 75-95%.','OV-C':'Subject fills frame. All text centered overlaid directly on subject.','2P-T-H':'Title top 5-25%. Two subjects side by side centered middle. Headline bottom 68-95%.','2P-TBH':'All typography stacked top 5-38%. Two subjects lower 42-95%.','2P-P-TBH':'Two subjects upper 38-45%. Typography stacked bottom 50-95%.','2P-OV':'Two subjects fill frame. Text overlaid floating top and bottom.','NO-C':'No people. Bold typography vertically and horizontally centered.','NO-T':'Typography top 5-45%. Background scene dominates lower area.','NO-B':'Background scene dominates upper. Typography bottom 55-95%.','NO-LR':'Typography left 50%. Decorative graphic or abstract element right 50%.','NO-BIG':'Oversized Title fills 55-75% of frame height. Impactful typographic hero.'};
+var LAYOUT_TH={'T-P-H':'Title บน|คนกลาง|Headline ล่าง','TB-P-H':'Title+Badge บน|คนกลาง|Headline ล่าง','TBH-P':'ทุกอย่างบน|คนล่าง','P-TBH':'คนบน|ทุกอย่างล่าง','T-P-BH':'Title บน|คนกลาง|Badge+HL ล่าง','TB-P':'Title+Badge บน|คนล่าง','P-H':'คนบน|Headline ล่าง','T-P':'Title บน|คนล่าง','SL-PR':'ข้อความซ้าย|คนขวา','PL-SR':'คนซ้าย|ข้อความขวา','SL-PR-B':'ข้อความซ้าย|คนขวา|Badge ล่าง','PL-SR-B':'คนซ้าย|ข้อความขวา|Badge ล่าง','OV-T':'Title ซ้อนบน|Headline ล่าง','OV-B':'Title บน|Headline ซ้อนล่าง','OV-TB':'Title+Badge ซ้อนบน|Headline ซ้อนล่าง','OV-C':'ทุกอย่างซ้อนกลาง','2P-T-H':'Title บน|2คนกลาง|Headline ล่าง','2P-TBH':'ข้อความบน|2คนล่าง','2P-P-TBH':'2คนบน|ข้อความล่าง','2P-OV':'2คน+ข้อความซ้อน','NO-C':'ข้อความกลาง','NO-T':'ข้อความบน','NO-B':'ข้อความล่าง','NO-BIG':'Title ใหญ่มาก','NO-LR':'ข้อความซ้าย+กราฟิกขวา'};
+
+// ── HELPERS ────────────────────────────────────────────
+function getAllTones(){var a=[];Object.keys(TONES).forEach(function(k){a=a.concat(TONES[k]);});return a;}
+function getToneObj(){return getAllTones().find(function(t){return t.id===TONE;})||{nm:'Dark',d:'',c:'#333'};}
+function escH(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+function glow(hex){return '0 0 5px '+hex+', 0 0 14px '+hex+'cc, 0 0 28px '+hex+'66, 2px 2px 4px rgba(0,0,0,1)';}
+function selVal(id){return document.getElementById(id).value;}
+
+// ── ACCORDION ──────────────────────────────────────────
+function toggleAcc(id){
+  var el=document.getElementById(id);
+  var hdr=el.querySelector('.acc-hdr');
+  var body=el.querySelector('.acc-body');
+  hdr.classList.toggle('open');
+  body.classList.toggle('open');
+  updateSteps();
+}
+function updateSteps(){
+  var filled=[false,false,false,false];
+  if(selVal('scat'))filled[0]=true;
+  if(selVal('ititle')||selVal('ithai'))filled[1]=true;
+  if(TONE!=='dark-red-glow'||LIGHT!=='natural')filled[2]=true;
+  if(document.getElementById('ob').textContent.length>50)filled[3]=true;
+  ['st1','st2','st3','st4'].forEach(function(id,i){
+    document.getElementById(id).classList.toggle('on',filled[i]);
+  });
+}
+
+// ── SUGGEST ────────────────────────────────────────────
+function renderSugg(){
+  var d=SUGG[CAT];
+  if(!d)return;
+  var tl=document.getElementById('sug-title');
+  var hl=document.getElementById('sug-hl');
+  tl.innerHTML=d.title.map(function(t){return '<div class="sug-item" onclick="useSugg(\'title\',\''+escH(t)+'\')">'+escH(t)+'</div>';}).join('');
+  hl.innerHTML=d.hl.map(function(t){return '<div class="sug-item" onclick="useSugg(\'hl\',\''+escH(t)+'\')">'+escH(t)+'</div>';}).join('');
+}
+function toggleSug(id){
+  var el=document.getElementById(id);
+  var isOpen=el.classList.contains('open');
+  document.querySelectorAll('.sug-list').forEach(function(s){s.classList.remove('open');});
+  if(!isOpen)el.classList.add('open');
+}
+function useSugg(type,val){
+  if(type==='title'){document.getElementById('ititle').value=val;}
+  else{document.getElementById('ithai').value=val;}
+  document.querySelectorAll('.sug-list').forEach(function(s){s.classList.remove('open');});
   build();
 }
-function pp2(el,v){
-  document.querySelectorAll('#pgrid .lbtn').forEach(b=>b.classList.remove('on'));
-  el.classList.add('on');POS=v;build();
+document.addEventListener('click',function(e){
+  if(!e.target.closest('.sug-wrap'))document.querySelectorAll('.sug-list').forEach(function(s){s.classList.remove('open');});
+});
+
+// ── TONE RENDER ────────────────────────────────────────
+function renderTones(cat){
+  var g=document.getElementById('tgrid');
+  g.innerHTML=TONES[cat].map(function(t){
+    return '<div class="tcard'+(TONE===t.id?' on':'')+'" onclick="setTone(this,\''+t.id+'\')" title="'+t.nm+'">'
+      +'<div class="dot" style="background:'+t.c+';'+(TONE===t.id?'box-shadow:0 0 8px 3px '+t.c+'88':'')+'"></div>'
+      +'<div class="tnm">'+t.nm+'<br><span style="font-size:7px;color:#555">'+t.d+'</span></div>'
+      +'</div>';
+  }).join('');
 }
+function checkToneWarn(){
+  var cat=CURCAT;
+  var bad=TONE_WARN_PAIRS[cat]||[];
+  var warn=bad.indexOf(LIGHT)>-1;
+  document.getElementById('tone-warn').classList.toggle('show',warn);
+}
+
+// ── EVENT HANDLERS ─────────────────────────────────────
+function setTC(el,cat){
+  document.querySelectorAll('.ttab').forEach(function(t){t.classList.remove('on');});
+  el.classList.add('on');CURCAT=cat;renderTones(cat);
+}
+function setTone(el,id){
+  document.querySelectorAll('.tcard').forEach(function(t){t.classList.remove('on');});
+  el.classList.add('on');TONE=id;checkToneWarn();build();
+}
+function setLt(el,id){
+  document.querySelectorAll('#lgrid2 .lcard').forEach(function(t){t.classList.remove('on');});
+  el.classList.add('on');LIGHT=id;checkToneWarn();build();
+}
+function setPF(el,id,ratio,safe){
+  document.querySelectorAll('.ptab').forEach(function(t){t.classList.remove('on');});
+  el.classList.add('on');PF=id;
+  document.getElementById('mock').style.aspectRatio=ratio;
+  document.getElementById('sz-warn').style.display=safe?'block':'none';
+  build();
+}
+function setL(el,v){
+  document.querySelectorAll('.lbtn').forEach(function(b){b.classList.remove('on');});
+  el.classList.add('on');LAYOUT=v;build();
+}
+function onCatChange(){CAT=selVal('scat');renderSugg();build();}
 function cbg(el,v){
-  document.querySelectorAll('#bgc .chip').forEach(c=>c.classList.remove('on'));
+  document.querySelectorAll('#bgc .chip').forEach(function(c){c.classList.remove('on');});
   el.classList.add('on');BG=v;build();
 }
-function csh(gid,el,t,v){
-  document.querySelectorAll('#'+gid+' .chip').forEach(c=>c.classList.remove('on'));
+function pc(gid,el,t){
+  document.querySelectorAll('#'+gid+' .sw').forEach(function(s){s.classList.remove('on');});
   el.classList.add('on');
-  if(t==='t')TSH=v; else HSH=v;
+  var c=el.dataset.c,g=el.dataset.g||c;
+  if(t==='t'){TC=c;TCG=g;document.getElementById('tc-hex').value=c;document.getElementById('tc-prev').style.background=c;}
+  else if(t==='h'){HC=c;HCG=g;document.getElementById('hc-hex').value=c;document.getElementById('hc-prev').style.background=c;}
+  else{QC=c;QCG=g;document.getElementById('qc-hex').value=c;document.getElementById('qc-prev').style.background=c;}
   build();
+}
+function setHex(t,val){
+  if(!/^#[0-9A-Fa-f]{6}$/.test(val))return;
+  if(t==='t'){TC=val;TCG=val;document.getElementById('tc-prev').style.background=val;}
+  else if(t==='h'){HC=val;HCG=val;document.getElementById('hc-prev').style.background=val;}
+  else{QC=val;QCG=val;document.getElementById('qc-prev').style.background=val;}
+  build();
+}
+function setBadge(type,el,val){
+  var gid=type==='bg'?'bbc':'btc';
+  document.querySelectorAll('#'+gid+' .sw').forEach(function(s){s.classList.remove('on');});
+  el.classList.add('on');
+  if(type==='bg'){BBC=val;document.getElementById('bbc-hex').value=val;}
+  else{BTC=val;document.getElementById('btc-hex').value=val;}
+  build();
+}
+function setBadgeHex(type,val){
+  if(!/^#[0-9A-Fa-f]{6}$/.test(val))return;
+  if(type==='bg')BBC=val;else BTC=val;build();
 }
 function togUp(){
   UPM=!UPM;
   document.getElementById('swup').classList.toggle('on',UPM);
-  document.getElementById('swup-l').textContent=UPM?'ฉัน Upload รูปคน':'ให้ AI สร้างคน';
-  document.getElementById('up-p').style.display=UPM?'block':'none';
-  build();
+  document.getElementById('swup-l').textContent=UPM?'Upload รูปคนเอง':'ให้ AI สร้างคน';
+  document.getElementById('up-p').style.display=UPM?'block':'none';build();
 }
 function togBg(){
   BGM=!BGM;
   document.getElementById('swbg').classList.toggle('on',BGM);
-  document.getElementById('swbg-l').textContent=BGM?'ฉัน Upload รูปพื้นหลัง':'ให้ AI สร้างพื้นหลัง';
-  document.getElementById('bg-chips-sec').style.display=BGM?'none':'block';
-  document.getElementById('bg-up-sec').style.display=BGM?'block':'none';
-  build();
+  document.getElementById('swbg-l').textContent=BGM?'Upload รูปพื้นหลัง':'ให้ AI สร้างพื้นหลัง';
+  document.getElementById('bg-chips').style.display=BGM?'none':'block';
+  document.getElementById('bg-up').style.display=BGM?'block':'none';build();
 }
 function pv(e,id){
   var f=e.target.files[0];if(!f)return;
@@ -482,136 +812,245 @@ function pv(e,id){
   r.readAsDataURL(f);
 }
 
-var BGD={urban:'blurred urban street with city lights and buildings',office:'blurred modern office interior with glass walls',store:'blurred retail store or marketplace environment',studio:'dark minimal studio with controlled lighting',conf:'blurred modern conference room or boardroom',nature:'blurred natural outdoor environment, greenery or sky',abstract:'abstract dark textured background with subtle patterns',factory:'blurred industrial warehouse or factory floor'};
-var TD={'dark-red':'dark background with dramatic red glow and red light leaks, high-energy BSG brand feel','dark-cinematic':'dark cinematic color grading, deep blacks, crushed shadows, filmic quality','dark-gold':'dark background with warm golden tones, luxury cinematic feel','dark-cool':'dark background with cool blue tones, tech and authority feel','dark-warm':'dark background with subtle amber warmth, storytelling mood','high-contrast':'extreme high contrast, near-black and near-white base with single accent color pop','moody-grey':'moody desaturated grey tones, editorial magazine style','clean-dark':'clean polished dark background, sleek and professional'};
-var LD={dramatic:'dramatic spotlight from above hitting the subject, strong top-down key light',rim:'rim lighting outlining subject edges with bright light, deep shadow on fill side',side:'cinematic side lighting, strong key light from one side, deep shadow on other',ambient:'natural ambient dark lighting, soft and realistic',backlit:'backlit subject with bright background glow, edge highlight on silhouette',edge:'subtle edge glow effect from colored light source on subject silhouette'};
-var GD={film:'film grain texture overlay for cinematic authenticity',clean:'clean and smooth, no grain or texture',gritty:'heavy gritty texture, raw and powerful feel',noise:'subtle digital noise for depth'};
-var VD={strong:'strong vignette, dark corners focusing attention to center',subtle:'subtle vignette, gentle darkening at edges',none:'no vignette'};
-var GND={f:'single Asian female speaker',m:'single Asian male speaker','f-m':'left: Asian female speaker, right: Asian male speaker','m-f':'left: Asian male speaker, right: Asian female speaker','m-m':'two Asian male speakers','f-f':'two Asian female speakers'};
-var OD={blazer:'business casual blazer, smart professional look',smart:'smart casual collared shirt or stylish top',formal:'formal business suit',casual:'stylish casual street outfit'};
-var ED={confident:'confident, direct eye contact with camera, slight authority look',power:'high energy, empowered, dynamic body language, motivated and driven',contrast:'left person: serious, thoughtful, looking slightly to the side. Right person: smiling or laughing naturally. Strong contrast in expressions.',serious:'both looking serious, focused, authoritative',smile:'both smiling warmly and naturally, friendly and approachable'};
-var PPOS={
-  'top-mid-bot':'LAYOUT: Place the Title at the very top of the image. Subject person centered in the middle zone (30-60% height). Headline text in the lower third (65-100%). Three distinct text–person–text zones.',
-  'top-bot':'LAYOUT: Title and Badge stacked in the upper 30-35% of image. Subject person centered in the middle zone (35-65% height). Headline text in the bottom 25-30%. Clear zone separation.',
-  'all-top':'LAYOUT: All typography (Title, Badge, Headline) stacked compactly in the upper 40%. Subject person fills the lower 60%, half-body shot rising from the bottom edge.',
-  'all-bot':'LAYOUT: Subject person occupies the upper 40-45%, half-body shot. All typography stacked in the lower 55-60%.',
-  'split-lr':'LAYOUT: Subject person on the right 50% of the image, looking slightly left. Title and Headline on the left 50%, vertically centered. Left-right split composition.',
-  'overlay':'LAYOUT: Subject person centered, filling most of the height. Title overlaid at the top. Headline overlaid at the bottom. Person clearly visible between text blocks. Text floats directly over the image.'
-};
-var TYPEN={solo:'TikTok solo creator / expert coach thumbnail',podcast:'TikTok podcast two-speaker format thumbnail',sales:'sales training motivational thumbnail, high energy',case:'business case study documentary-style thumbnail',promo:'course or workshop promotion thumbnail',news:'business news / trend / insight editorial thumbnail'};
+// ── AUTO MODE ──────────────────────────────────────────
+function autoMode(){
+  var d=AUTO[CAT];if(!d)return;
+  var s=SUGG[CAT];
+  if(s){
+    document.getElementById('ititle').value=s.title[0];
+    document.getElementById('ithai').value=s.hl[0];
+    document.getElementById('ibadge').value=CAT.toUpperCase()+' TIPS';
+  }
+  TONE=d.tone;LIGHT=d.light;BG=d.bg;LAYOUT=d.layout;
+  // Sync selects
+  document.getElementById('sexpr').value=d.expr;
+  document.getElementById('sout').value=d.out;
+  document.getElementById('scam').value=d.cam;
+  document.getElementById('sang').value=d.ang;
+  // Sync tone tab
+  var cats=['dark','vibrant','pastel','corp','warm','natural','trendy','seasonal'];
+  cats.forEach(function(c,i){
+    if(TONES[c]&&TONES[c].find(function(t){return t.id===TONE;})){
+      CURCAT=c;
+      document.querySelectorAll('.ttab').forEach(function(el,j){el.classList.toggle('on',j===i);});
+      renderTones(c);
+    }
+  });
+  // Sync light
+  var lids=['natural','golden','spot','side','backlit','neon','soft','drama','dreamy','studio'];
+  document.querySelectorAll('#lgrid2 .lcard').forEach(function(el,i){el.classList.toggle('on',lids[i]===LIGHT);});
+  // Sync bg
+  document.querySelectorAll('#bgc .chip').forEach(function(el){
+    el.classList.toggle('on',(el.getAttribute('onclick')||'').indexOf("'"+BG+"'")>-1);
+  });
+  // Sync layout
+  document.querySelectorAll('.lbtn').forEach(function(el){
+    el.classList.toggle('on',(el.getAttribute('onclick')||'').indexOf("'"+LAYOUT+"'")>-1);
+  });
+  checkToneWarn();build();
+}
 
+// ── FULLSCREEN ─────────────────────────────────────────
+function openFS(mode){
+  FS_MODE=mode;
+  var ov=document.getElementById('fs-overlay');
+  var fc=document.getElementById('fs-content');
+  if(mode==='prompt'){
+    fc.textContent=document.getElementById('ob').textContent;
+  } else {
+    fc.innerHTML='<div style="display:flex;align-items:center;justify-content:center;min-height:400px;font-size:60px">🖼️<br><div style="font-size:14px;color:#666;margin-top:12px">Preview</div></div>';
+  }
+  ov.classList.add('open');
+}
+function closeFS(){document.getElementById('fs-overlay').classList.remove('open');}
+function copyFS(){
+  var txt=document.getElementById('fs-content').textContent;
+  navigator.clipboard.writeText(txt).then(function(){
+    var btn=document.querySelector('.fs-copy');
+    btn.textContent='Copied ✓';setTimeout(function(){btn.textContent='Copy ทั้งหมด';},2000);
+  });
+}
+
+// ── CHARACTER COUNTER ──────────────────────────────────
+function updateCounter(id,counterId,max){
+  var len=document.getElementById(id).value.length;
+  var el=document.getElementById(counterId);
+  el.textContent=len+' / '+max+' ตัวอักษร';
+  el.className='counter '+(len>max?'over':len>max*.8?'warn':'ok');
+}
+
+// ── BUILD PROMPT ───────────────────────────────────────
 function build(){
-  var tsv=parseInt(document.getElementById('tsz').value);
-  var hsv=parseInt(document.getElementById('hsz').value);
+  var tsv=parseInt(selVal('tsz')),hsv=parseInt(selVal('hsz'));
   document.getElementById('tsz-v').textContent=SZL[tsv-1];
   document.getElementById('hsz-v').textContent=SZL[hsv-1];
-  var title=document.getElementById('ititle').value.trim();
-  var thai=document.getElementById('ithai').value.trim();
-  var badge=document.getElementById('ibadge').value.trim();
-  var type=document.getElementById('stype').value;
-  var cnt=document.getElementById('scnt').value;
-  var gdr=document.getElementById('sgdr').value;
-  var expr=document.getElementById('sexpr').value;
-  var outfit=document.getElementById('sout').value;
-  var tone=document.getElementById('stone').value;
-  var light=document.getElementById('slight').value;
-  var grain=document.getElementById('sgrain').value;
-  var vig=document.getElementById('svig').value;
-
+  var title=selVal('ititle').trim(),thai=selVal('ithai').trim(),badge=selVal('ibadge').trim();
+  var cnt=selVal('scnt'),expr=selVal('sexpr'),outfit=selVal('sout'),cam=selVal('scam'),ang=selVal('sang');
+  var to=getToneObj();
+  updateCounter('ititle','cnt-title',20);
+  updateCounter('ithai','cnt-hl',40);
   updateMock(title,thai,badge,tsv,hsv);
+  updateSum(title,thai,badge,cnt,expr,outfit,cam,ang,to);
+  checkToneWarn();
+  updateSteps();
 
   var L=[];
-  L.push('Create a vertical 9:16 TikTok thumbnail — '+TYPEN[type]+'.','');
-  L.push('[LAYOUT — FOLLOW EXACTLY]');
-  L.push(PPOS[POS],'');
-  L.push('[BACKGROUND]');
-  if(BGM){
-    L.push('Use the uploaded background image as the scene. Apply: '+TD[tone]+'. Lighting: '+LD[light]+'. Texture: '+GD[grain]+'. '+VD[vig]+'.');
-  } else {
-    L.push(BGD[BG]+', heavily blurred bokeh. '+TD[tone]+'. Lighting: '+LD[light]+'. '+GD[grain]+'. '+VD[vig]+'.');
-  }
+  L.push('You are generating a professional social media thumbnail for GPT-4o image generation.');
+  L.push('Platform: '+PF_EN[PF],'');
+  L.push('━━━ [1] COMPOSITION & LAYOUT ━━━');
+  L.push(LAYOUT_EN[LAYOUT]);
+  if(PF==='reel'||PF==='igs')L.push('⚠ SAFE ZONE: Keep ALL text within middle 70% of frame. Top 15% and bottom 15% covered by platform UI.');
   L.push('');
-  L.push('[PEOPLE]');
-  if(cnt==='0'){
-    L.push('No people. Bold typographic layout only, strong visual hierarchy.');
+  L.push('━━━ [2] CAMERA & OPTICS ━━━');
+  L.push('Shot: '+CAM_EN[cam]);
+  L.push('Angle: '+ANG_EN[ang]);
+  L.push('Depth of field: Shallow f/1.4-1.8 equivalent. Subject razor-sharp. Background smooth creamy bokeh.');
+  L.push('Lens: 85mm portrait equivalent, natural perspective, flattering compression.');
+  L.push('');
+  L.push('━━━ [3] SUBJECT / PEOPLE ━━━');
+  if(cnt==='none'){
+    L.push('No people. Typography and background are sole visual elements. Bold graphic composition.');
   } else if(UPM){
-    L.push('Use the person in the uploaded photo as the main subject. Preserve their face, hair, and outfit exactly as shown. Composite them naturally into the scene with matching lighting and color grading.');
-    if(cnt==='2')L.push('If a second speaker is needed, generate a complementary Asian speaker beside them with the same lighting style.');
+    L.push('REFERENCE PHOTO: Use uploaded photo as main subject. Preserve exact face, skin tone, hair. Composite naturally with matched lighting and color grading.');
   } else {
-    L.push(GND[gdr]+', half-body shot in the foreground. '+ED[expr]+' Wearing '+OD[outfit]+'.');
+    L.push('Subject: '+CNT_EN[cnt]+'. Asian ethnicity, photorealistic.');
+    L.push('Expression: '+EXPR_EN[expr]);
+    L.push('Outfit: '+OUT_EN[outfit]);
+    L.push('Appearance: Clean well-groomed, warm natural Asian skin tone, realistic hair, accurate anatomy.');
   }
   L.push('');
-  L.push('[TYPOGRAPHY — FLOATING TEXT, NO BACKGROUND BARS OR STRIPS]');
-  L.push('CRITICAL: Do NOT place any dark panel, semi-transparent strip, bar, or box behind ANY text. ALL text must float directly on top of the background or subject. Use only shadows and outlines for legibility.');
+  L.push('━━━ [4] BACKGROUND & ENVIRONMENT ━━━');
+  L.push('Scene: '+(BGM?'Use uploaded background image.':BGD[BG]+'.'));
+  L.push('Background blur: Maximum bokeh f/1.4 equivalent, background completely defocused.');
+  L.push('Color tone: '+to.nm+' — '+to.d);
+  L.push('Lighting: '+LIGHT_EN[LIGHT]);
+  L.push('Color grade: Cinematic post-processing, deep rich blacks, boosted midtone contrast, film quality.');
+  L.push('');
+  L.push('━━━ [5] TYPOGRAPHY ━━━');
+  L.push('RULE: ZERO background panels, strips, bars, boxes behind any text. All text floats directly on image. Legibility via shadows and glow only.');
   L.push('');
   if(title){
-    L.push('TITLE: "'+title.toUpperCase()+'"');
-    L.push('  Color: '+TC);
-    L.push('  Font: Bebas Neue or Impact condensed bold, all caps');
-    L.push('  Size: '+SZP[tsv-1]);
-    L.push('  Text treatment: '+SHD[TSH]);
-    L.push('  Background behind text: NONE — text floats directly on image.');
+    var tpct=10+(tsv*8);
+    L.push('▶ TITLE: "'+title.toUpperCase()+'"');
+    L.push('  Color: '+TC+' — vibrant luminous glowing, letters appear lit from within, rich not flat');
+    L.push('  Font: Impact or Bebas Neue — ultra-bold condensed all-caps, maximum weight');
+    L.push('  Size: title height = '+tpct+'% of total image height');
+    L.push('  Letter spacing: -0.02em tight condensed');
+    L.push('  Shadow: (1) hard drop 3px 3px 0px rgba(0,0,0,1) (2) outer black glow 0px 0px 20px rgba(0,0,0,.95) (3) colored glow 0px 0px 15px '+TC+', 0px 0px 30px '+TC+'88');
+    L.push('  NO background fill, bar, or strip. Text only.');
   }
   if(badge){
-    L.push('BADGE LABEL: "'+badge.toUpperCase()+'" — small pill-shaped badge: yellow (#FFD600) fill with bold black text. Keep it compact, label-sized only — not a full-width strip.');
+    L.push('▶ BADGE: "'+badge.toUpperCase()+'"');
+    L.push('  Pill-shaped label — background: '+BBC+', text: '+BTC+', bold condensed caps');
+    L.push('  Width: ~30-35% of image width. Height: 3-4% of image height. Intentional design, not a strip.');
   }
   if(thai){
-    L.push('THAI HEADLINE: "'+thai+'"');
-    L.push('  Color: '+HC);
-    L.push('  Font: bold Thai weight, clean and readable');
-    L.push('  Size: '+SZP[hsv-1]);
-    L.push('  Text treatment: '+SHD[HSH]);
-    L.push('  Background behind text: NONE — text floats directly on image.');
-    L.push('  Important: words inside quotation marks ("...") must be rendered in '+QC+' and slightly larger/bolder than surrounding text for strong emphasis. No background behind quoted words either.');
+    var hpct=8+(hsv*6);
+    L.push('▶ THAI HEADLINE: "'+thai+'"');
+    L.push('  Color: '+HC+' — vibrant luminous glowing '+HC+', same principle as Title');
+    L.push('  Font: bold Thai-compatible, clean high-readability, semi-bold to bold');
+    L.push('  Size: headline height = '+hpct+'% of total image height');
+    L.push('  Shadow: (1) hard drop 2px 2px 8px rgba(0,0,0,1) (2) outer glow 0px 0px 16px rgba(0,0,0,.9) (3) colored glow 0px 0px 12px '+HC+', 0px 0px 25px '+HC+'77');
+    L.push('  QUOTED TEXT "...": render in '+QC+', 12% larger and bolder, emotional peak of headline.');
+    L.push('  NO background fill, bar, or strip. Text only.');
   }
-  if(!title&&!thai){
-    L.push('Add bold typography with clear visual hierarchy. Maximum two accent colors. All text floats on image — no panels or strips.');
+  if(!title&&!thai)L.push('Generate bold impactful typography for the content. Max 2 accent colors. Glowing luminous text, no background panels.');
+  L.push('');
+  L.push('━━━ [6] FINAL QUALITY ━━━');
+  L.push('Style reference: Netflix original thumbnail / high-end editorial magazine cover / premium advertising photography campaign');
+  L.push('Render quality: Ultra-high resolution, photorealistic render. Crisp sharp subject, smooth bokeh background, rich deep colors.');
+  L.push('Composition: Clean, purposeful, scroll-stopping. Every element earns its place. Strong visual hierarchy.');
+  L.push('Color richness: Saturated vivid colors, deep blacks, clean bright highlights. No washed-out or desaturated look.');
+  L.push('Subject quality: Realistic human skin texture, natural hair detail, accurate hands and fingers, lifelike eyes.');
+  L.push('Typography render: All text must be crisp, perfectly legible, with visible glow and shadow layers as specified. No aliasing or blur on text edges.');
+  L.push('Overall: The image should make a viewer stop scrolling immediately. Premium, polished, professional at first glance.');
+  L.push('');
+  L.push('━━━ [7] ABSOLUTE PROHIBITIONS ━━━');
+  L.push('✗ NO dark/semi-transparent panel, bar, strip, box, or overlay BEHIND any text — ever');
+  L.push('✗ NO logos, watermarks, brand icons, channel names — all added in post-production');
+  L.push('✗ NO cartoon, illustration, anime, or painting style — photorealistic only');
+  L.push('✗ NO distorted or uncanny faces — natural realistic human appearance only');
+  L.push('✗ NO extra fingers, missing fingers, deformed hands, or wrong anatomy');
+  L.push('✗ NO flat, dull, or lifeless lighting — dynamic cinematic lighting required');
+  L.push('✗ NO cluttered or overcrowded composition — clean and intentional only');
+  L.push('✗ NO overexposed blown-out highlights or crushed detail-less shadows');
+  L.push('✗ NO generic stock-photo look or stiff artificial poses');
+  L.push('✗ NO text that is blurry, pixelated, or unreadable');
+  L.push('✗ NO mismatched lighting between subject and background');
+  if(PF==='reel'||PF==='igs'){
+    L.push('✗ NO text placed in top 15% or bottom 15% of frame (platform UI safe zone violation)');
   }
-  L.push('');
-  L.push('DO NOT include any logos, brand marks, watermarks, or channel icons — added separately in post.');
-  L.push('');
-  L.push('[FINAL QUALITY]');
-  L.push('Photorealistic, high resolution, professional viral thumbnail quality. Clean separation between text zones and subject. No visual clutter. No background bars behind text. 9:16 aspect ratio.');
-
   document.getElementById('ob').textContent=L.join('\n');
 
-  var neg='dark strip, dark bar, semi-transparent panel behind text, black background behind text, dark overlay under title or headline, text box, text banner, typography covering subject\'s face, unreadable Thai text, blurry text, any logo or watermark, cartoon style, distorted faces, extra fingers, white background, rainbow neon, stock photo look, generic AI face, cluttered composition, overexposed highlights';
-  if(tsv<=2)neg+=', large dominant text, bold text taking more than 25% of image height';
+  var neg='dark bar behind text, semi-transparent overlay under text, text background strip, black box behind title, panel behind words, blurry unreadable text, any logo or watermark, cartoon illustration anime style, distorted face, deformed hands, extra fingers, flat lifeless lighting, amateur photography, overcrowded composition, overexposed highlights, stock photo generic look';
+  if(PF==='reel'||PF==='igs')neg+=', text in top 15% of frame, text in bottom 15% of frame';
   document.getElementById('nb').textContent=neg;
 }
 
+// ── MOCK UPDATE ────────────────────────────────────────
 function updateMock(title,thai,badge,tsv,hsv){
   var mc=document.getElementById('mc');
-  var shadowStyle='text-shadow:2px 2px 8px rgba(0,0,0,1),0 0 16px rgba(0,0,0,.8)';
-  var te=title?'<div class="mt" style="color:'+TC+';font-size:'+TPX[tsv-1]+'px;'+shadowStyle+'">'+escH(title.toUpperCase())+'</div>':'';
-  var be=badge?'<div class="mb">'+escH(badge.toUpperCase())+'</div>':'';
-  var he=thai?'<div class="mh" style="color:'+HC+';font-size:'+HPX[hsv-1]+'px;'+shadowStyle+'">'+escH(thai)+'</div>':'';
+  var tpx=[7,9,12,15,19],hpx=[6,7,9,12,15];
+  var tg='text-shadow:'+glow(TC)+';',hg='text-shadow:'+glow(HC)+';';
+  var te=title?'<div class="mt" style="color:'+TC+';font-size:'+tpx[tsv-1]+'px;'+tg+'">'+escH(title.toUpperCase())+'</div>':'';
+  var be=badge?'<div class="mb-badge" style="background:'+BBC+';color:'+BTC+'">'+escH(badge.toUpperCase())+'</div>':'';
+  var he=thai?'<div class="mh" style="color:'+HC+';font-size:'+hpx[hsv-1]+'px;'+hg+'">'+escH(thai)+'</div>':'';
   var pe='<div class="mp">🧍</div>';
-  var h='';
-  if(POS==='top-mid-bot'||POS==='top-bot')h=te+be+pe+he;
-  else if(POS==='all-top')h=te+be+he+pe;
-  else if(POS==='all-bot')h=pe+te+be+he;
-  else if(POS==='split-lr')h='<div style="display:flex;height:100%;gap:3px"><div style="flex:1;display:flex;flex-direction:column;justify-content:center;padding:4px">'+te+be+he+'</div><div style="flex:1;display:flex;align-items:center;justify-content:center;font-size:24px">🧍</div></div>';
-  else if(POS==='overlay')h=te+be+pe+he;
+  var h='',L=LAYOUT;
+  if(L==='T-P-H'||L==='TB-P-H'||L==='T-P-BH')h=te+be+pe+he;
+  else if(L==='TBH-P')h=te+be+he+pe;
+  else if(L==='P-TBH'||L==='P-H')h=pe+te+be+he;
+  else if(L==='TB-P'||L==='T-P')h=te+be+pe;
+  else if(L.includes('SL-PR'))h='<div style="display:flex;height:100%;gap:2px"><div style="flex:1;display:flex;flex-direction:column;justify-content:center;padding:3px">'+te+be+he+'</div><div style="flex:1;display:flex;align-items:center;justify-content:center;font-size:16px">🧍</div></div>';
+  else if(L.includes('PL-SR'))h='<div style="display:flex;height:100%;gap:2px"><div style="flex:1;display:flex;align-items:center;justify-content:center;font-size:16px">🧍</div><div style="flex:1;display:flex;flex-direction:column;justify-content:center;padding:3px">'+te+be+he+'</div></div>';
+  else if(L.startsWith('OV'))h=te+be+pe+he;
+  else if(L.startsWith('2P'))h=te+'<div style="display:flex;justify-content:center;gap:3px;flex:1;align-items:center"><span style="font-size:14px">🧍</span><span style="font-size:14px">🧍</span></div>'+he;
+  else if(L==='NO-BIG')h='<div style="flex:1;display:flex;align-items:center;justify-content:center"><div class="mt" style="color:'+TC+';font-size:22px;'+tg+'">'+escH((selVal('ititle')||'BIG TITLE').toUpperCase())+'</div></div>';
+  else h='<div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center">'+te+be+he+'</div>';
   mc.innerHTML=h;
 }
 
-function escH(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+// ── SUMMARY ────────────────────────────────────────────
+function updateSum(title,thai,badge,cnt,expr,outfit,cam,ang,to){
+  var pfn={fb:'Facebook Post',reel:'TikTok/Reel',ig:'IG Post',igs:'IG Story',yt:'YouTube',banner:'Banner'};
+  var ltn={natural:'แสงกลางวัน',golden:'แสงโกลเด้น',spot:'สปอตไลท์',side:'แสงด้านข้าง',backlit:'แสงหลัง',neon:'แสงนีออน',soft:'แสงนุ่ม',drama:'แสงดราม่า',dreamy:'แสง Dreamy',studio:'แสงสตูดิโอ'};
+  var bgn={urban:'เมือง',office:'ออฟฟิศ',store:'ร้านค้า',studio:'สตูดิโอ',conf:'ห้องประชุม',nature:'ธรรมชาติ',abstract:'Abstract',factory:'โรงงาน',cafe:'คาเฟ่',stage:'เวที'};
+  var s='แพลตฟอร์ม: '+pfn[PF]+'\n';
+  s+='Layout: '+LAYOUT_TH[LAYOUT]+'\n';
+  s+=(cnt==='none'?'คน: ไม่มีคน':UPM?'คน: Upload รูปเอง':'คน: '+CNT_TH[cnt]+' | '+EXPR_TH[expr]+' | '+OUT_TH[outfit]+' | '+CAM_TH[cam]+' | '+ANG_TH[ang])+'\n';
+  s+='พื้นหลัง: '+(BGM?'Upload':bgn[BG])+'\n';
+  s+='โทนสี: '+to.nm+' ('+to.d+')\n';
+  s+='แสง: '+ltn[LIGHT]+'\n';
+  if(title)s+='Title: "'+title+'" → '+TC+'\n';
+  if(badge)s+='Badge: "'+badge+'" | BG:'+BBC+' Text:'+BTC+'\n';
+  if(thai)s+='Headline: "'+thai+'" → '+HC;
+  document.getElementById('sum-txt').textContent=s||'เลือกตัวเลือกด้านซ้าย...';
+}
 
+// ── COPY ───────────────────────────────────────────────
 function co(id,lbl){
-  var txt=document.getElementById(id).textContent;
-  navigator.clipboard.writeText(txt).then(function(){
-    var btns=document.querySelectorAll('.copy-btn');
-    btns.forEach(function(b){
-      if(b.getAttribute('onclick')&&b.getAttribute('onclick').includes(id)){
-        b.textContent='Copied ✓';
-        setTimeout(function(){b.textContent=lbl;},2000);
+  navigator.clipboard.writeText(document.getElementById(id).textContent).then(function(){
+    document.querySelectorAll('.cbtn').forEach(function(b){
+      if((b.getAttribute('onclick')||'').indexOf("'"+id+"'")>-1){
+        b.textContent='Copied ✓';setTimeout(function(){b.textContent=lbl;},2000);
       }
     });
   });
 }
 
-build();
+// ── WIRE INPUTS ────────────────────────────────────────
+window.addEventListener('load',function(){
+  ['ititle','ithai','ibadge'].forEach(function(id){document.getElementById(id).addEventListener('input',build);});
+  ['scnt','sexpr','sout','scam','sang'].forEach(function(id){document.getElementById(id).addEventListener('change',build);});
+  document.getElementById('tsz').addEventListener('input',build);
+  document.getElementById('hsz').addEventListener('input',build);
+  document.querySelectorAll('#tc .sw').forEach(function(el){el.addEventListener('click',function(){pc('tc',this,'t');});});
+  document.querySelectorAll('#hc .sw').forEach(function(el){el.addEventListener('click',function(){pc('hc',this,'h');});});
+  document.querySelectorAll('#qc .sw').forEach(function(el){el.addEventListener('click',function(){pc('qc',this,'q');});});
+  renderTones('dark');
+  renderSugg();
+  build();
+});
 </script>
 </body>
 </html>
